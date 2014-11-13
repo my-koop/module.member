@@ -1,9 +1,9 @@
 function addRoutes(metaData) {
     metaData.addFrontendRoute({
-        idPath: ["public", "example"],
-        component: "Component1",
-        name: "example",
-        path: "/example"
+        idPath: ["public", "newMemBox"],
+        component: "NewMemberBox",
+        name: "newMemBox",
+        path: "/newMemBox"
     });
 }
 exports.addRoutes = addRoutes;

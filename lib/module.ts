@@ -26,6 +26,32 @@ class Module extends utils.BaseModule implements mkmember.Module {
     res.value = inParam.value + " Incremented id by 1";
     callback(null, res);
   }
+  getSubOptions(
+    callback: (err: Error, res ?: mkmember.Option[]) => void
+  ) {
+    var options: mkmember.Option[];
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        return callback(err, null);
+      }
+      var query = connection.query(
+        "SELECT name,value FROM `option` where type in ('sub','fee');",
+        function(err, rows) {
+          cleanup();
+          if (err) {
+            return callback(err, null);
+          }
+
+          for(var i in rows){
+            options.push(new Option(rows[i]));
+          }
+
+          callback(new Error("No result"), null);
+
+      });
+    });
+
+  }
 }
 
 export = Module;
