@@ -6,6 +6,7 @@ import validation = require("../validation/index");
 // Controllers.
 import getSubOptions = require("./getSubOptions");
 import getMemberInfo = require("./getMemberInfo");
+import updateMemberInfo = require("./updateMemberInfo");
 
 var endPoints = metaData.endpoints;
 
@@ -21,5 +22,11 @@ export function attachControllers(binder) {
       endPoint: endPoints.member.getMemberInfo
     },
     getMemberInfo
+  );
+  binder.attach(
+    {
+      endPoint: endPoints.members.updateMemberInfo
+    },
+    updateMemberInfo
   );
 }

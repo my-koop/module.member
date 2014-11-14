@@ -22,6 +22,7 @@
   "homepage": "https://github.com/my-koop/module.member",
   "dependencies": {
     "mykoop-logger": "git://github.com/my-koop/module.logger",
-    "mykoop-utils": "git://github.com/my-koop/module.utils#rc"
+    "mykoop-utils": "git://github.com/my-koop/module.utils#rc",
+    "mykoop-transaction": "git://github.com/my-koop/module.transaction#rc"
   }
 }

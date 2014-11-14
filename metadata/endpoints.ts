@@ -7,6 +7,10 @@ var endpoints = {
     getMemberInfo: {
       path: "/member/getMemberInfo",
       method: "get"
+    },
+    updateMemberInfo: {
+      path: "member/updateMemberInfo",
+      method: "put"
     }
   }
 

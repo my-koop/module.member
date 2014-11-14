@@ -92,8 +92,11 @@ var NewMemberBox = React.createClass({
     )
   },
 
-  onSubmit: function(){
-
+  onSubmit: function(e){
+    e.preventDefault();
+    //Create transaction for new member
+    //Create transaction for sub fee
+    //Check if user already has an open transaction?
   },
 
   displayFee: function(){
@@ -110,10 +113,7 @@ var NewMemberBox = React.createClass({
     return total;
   },
 
-  //FIX ME: Submit request
-    //Store form values in state
-    //Send data to controller
-/* */
+
 
 
   render: function() {

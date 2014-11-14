@@ -17,6 +17,13 @@ declare module mkmember {
     activeUntil: Date;
   }
 
+  export interface UpdateMember {
+    id: number;
+    isMember: boolean;
+    subPrice: number;
+    feePrice: number;
+  }
+
   export interface Module extends mykoop.IModule {
     getSubOptions(
       callback: (err: Error, ret: mkmember.MKOption[]) => void
@@ -25,6 +32,11 @@ declare module mkmember {
     getMemberInfo(
       id,
       callback: (err: Error, res ?: mkmember.MemberInfo) => void
+    ): void;
+
+    updateMemberInfo(
+      updateInfo: mkmember.UpdateMember,
+      callback: (err: Error) =>void
     ): void;
   }
 }
