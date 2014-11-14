@@ -28,7 +28,8 @@ var NewMemberBox = React.createClass({
       subOptions: {},
       feePrice: null,
       subPrice: 3,
-      totalPrice: null
+      totalPrice: null,
+      memberInfo: {}
     }
   },
 
@@ -37,6 +38,7 @@ var NewMemberBox = React.createClass({
     var price;
     var options = [];
 
+    //Getting fee and subscriptions costs
     actions.member.getSubOptions(
       {},
       function(err, res){
@@ -62,12 +64,51 @@ var NewMemberBox = React.createClass({
         }
       }
     )
+
+    //Getting member information for this user
+    actions.member.getMemberInfo(
+      {
+        data: {
+          id: self.props.id
+        }
+      },
+      function(err, info){
+        if(err){
+          console.error(err);
+          return;
+        }
+        if(!info){
+          //User is not a member
+          self.setState({
+            memberInfo: null
+          });
+        } else {
+          //User has an entry in member table
+          self.setState({
+            memberInfo : info
+          });
+        }
+      }
+    )
   },
 
   onSubmit: function(){
 
   },
 
+  displayFee: function(){
+    var display = "";
+    if(this.state.memberInfo.isMember){
+      display = __("member::memberBoxFeeIsMember");
+    } else {
+      display = this.state.feePrice + "$";
+    }
+    return display;
+  },
+  calculateTotalPrice: function(){
+    var total = parseInt(this.state.subPrice) + (this.state.memberInfo.isMember?0:this.state.feePrice);
+    return total;
+  },
 
   //FIX ME: Submit request
     //Store form values in state
@@ -91,10 +132,10 @@ var NewMemberBox = React.createClass({
         <BSGrid>
           <BSRow>
             <BSCol xs={2} md={4}>
-              Adhesion a la coop
+             {__("member::memberBoxFeeMessage")}
             </BSCol>
             <BSCol xs={2} md={4}>
-              {this.state.feePrice + "$"}
+              {this.displayFee()}
             </BSCol>
           </BSRow>
           <BSRow>
@@ -102,7 +143,7 @@ var NewMemberBox = React.createClass({
               <BSInput
                 type="select"
                 defaultValue="3"
-                label="Duree de l'abonnement"
+                label={__("member::memberBoxDropdown")}
                 valueLink={this.linkState("subPrice")}
               >
                 {subOptions}
@@ -117,7 +158,7 @@ var NewMemberBox = React.createClass({
               <span> NOTICE MESSAGE avec date dexpiration </span>
             </BSCol>
             <BSCol xs={2} md={4}>
-              <span> Total: {parseInt(this.state.feePrice) + parseInt(this.state.subPrice)} $ </span>
+              <span> Total: {this.calculateTotalPrice()}$ </span>
             </BSCol>
           </BSRow>
           <BSRow>

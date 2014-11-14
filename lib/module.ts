@@ -34,6 +34,31 @@ class Module extends utils.BaseModule implements mkmember.Module {
     });
 
   }
+  getMemberInfo(
+    id,
+    callback: (err: Error, res ?: mkmember.MemberInfo) => void
+  ) {
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        return callback(err, null);
+      }
+      var query = connection.query(
+        "SELECT isActive,isMember,subscriptionExpirationDate as activeUntil FROM member WHERE id = ?",
+         [id],
+        function(err, rows) {
+          cleanup();
+          if (err) {
+            return callback(err, null);
+          }
+          if(rows.length === 1){
+            callback(null, rows[0])
+          } else {
+            callback(null, null)
+          }
+
+      });
+    });
+  }
 }
 
 export = Module;

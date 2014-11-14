@@ -11,11 +11,21 @@ declare module mkmember {
     name: string;
     type: string;
   }
+  export interface MemberInfo {
+    isActive: boolean;
+    isMember: boolean;
+    activeUntil: Date;
+  }
+
   export interface Module extends mykoop.IModule {
     getSubOptions(
       callback: (err: Error, ret: mkmember.MKOption[]) => void
     ): void;
-  }
 
+    getMemberInfo(
+      id,
+      callback: (err: Error, res ?: mkmember.MemberInfo) => void
+    ): void;
+  }
 }
 

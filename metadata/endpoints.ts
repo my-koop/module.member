@@ -3,6 +3,10 @@ var endpoints = {
     getSubOptions: {
       path: "/member/getSubOptions",
       method:"get"
+    },
+    getMemberInfo: {
+      path: "/member/getMemberInfo",
+      method: "get"
     }
   }
 
