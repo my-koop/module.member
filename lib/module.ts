@@ -96,16 +96,14 @@ class Module extends utils.BaseModule implements mkmember.Module {
             if(!updateInfo.isMember){
                 self.transaction.saveNewBill(
                 {
-                  data: {
-                    total: updateInfo.feePrice,
-                    archiveBill: false,
-                    customerEmail : email,
-                    items: [{
+                  total: updateInfo.feePrice,
+                  archiveBill: false,
+                  customerEmail : email,
+                  items: [{
                         id: -1,
                         price: updateInfo.feePrice,
                         quantity: 1
-                    }]
-                  }
+                  }]
                 }, function( err , res){
                     next(err, email ,res.idBill)
                 })
@@ -115,16 +113,14 @@ class Module extends utils.BaseModule implements mkmember.Module {
           }, function createBillForSub( email, feeBillId, next){
               self.transaction.saveNewBill(
               {
-                data: {
-                  total : updateInfo.subPrice,
-                  archiveBill: false,
-                  customerEmail: email,
-                  items: [{
+                total : updateInfo.subPrice,
+                archiveBill: false,
+                customerEmail: email,
+                items: [{
                     id: -1,
                     price: updateInfo.subPrice,
                     quantity: 1
-                  }]
-                }
+                }]
               }, function(err, res){
                   next(err, feeBillId, res.idBill);
               })
