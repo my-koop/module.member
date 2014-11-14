@@ -6,14 +6,14 @@
 /// <reference path="../mykoop/mykoop.d.ts" />
 declare module mkmember {
 
-  export interface ModuleClass1 {
+  export interface MKOption {
     value: string;
-    id: number;
+    name: string;
+    type: string;
   }
   export interface Module extends mykoop.IModule {
-    method1(
-      inParam: {id:number; value:string},
-      callback: (err: Error, res ?: ModuleClass1) => void
+    getSubOptions(
+      callback: (err: Error, ret: mkmember.MKOption[]) => void
     ): void;
   }
 

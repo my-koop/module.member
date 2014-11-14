@@ -1,52 +1,34 @@
 import utils = require("mykoop-utils");
-import ModuleClass1 = require("./classes/ModuleClass1");
 import controllerList = require("./controllers/index");
+import MKOption = require("./classes/MKOption");
 var ApplicationError = utils.errors.ApplicationError;
 
 class Module extends utils.BaseModule implements mkmember.Module {
+  db: mkdatabase.Module;
   init() {
+    var db = <mkdatabase.Module>this.getModuleManager().get("database");
+    var routerModule = <mykoop.Router>this.getModuleManager().get("router");
+
     controllerList.attachControllers(new utils.ModuleControllersBinder(this));
+
+    this.db = db;
   }
 
-  method1(
-    inParam: {id:number; value:string},
-    callback: (err: Error, res ?: mkmember.ModuleClass1) => void
-  ) {
-    if (!inParam.id) {
-      return callback(new ApplicationError(
-        null,
-        {
-          id: "custom message"
-        },
-        "Wrong id"
-      ));
-    }
-    var res = new ModuleClass1();
-    res.id = inParam.id + 1;
-    res.value = inParam.value + " Incremented id by 1";
-    callback(null, res);
-  }
   getSubOptions(
-    callback: (err: Error, res ?: mkmember.Option[]) => void
+    callback: (err: Error, res ?: mkmember.MKOption[]) => void
   ) {
-    var options: mkmember.Option[];
     this.db.getConnection(function(err, connection, cleanup) {
       if(err) {
         return callback(err, null);
       }
       var query = connection.query(
-        "SELECT name,value FROM `option` where type in ('sub','fee');",
+        "SELECT name,value,type FROM `option` where type in ('sub','fee');",
         function(err, rows) {
           cleanup();
           if (err) {
             return callback(err, null);
           }
-
-          for(var i in rows){
-            options.push(new Option(rows[i]));
-          }
-
-          callback(new Error("No result"), null);
+          callback(null, rows);
 
       });
     });
