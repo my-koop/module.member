@@ -72,17 +72,23 @@ var NewMemberBox = React.createClass({
           id: self.props.id
         }
       },
-      function(err, info){
+      function(err, res){
         if(err){
           console.error(err);
           return;
         }
-        if(info){
+        if(res.isMember){
           self.setState({
-            memberInfo: info,
+            isMember: res.isMember,
             feePrice: 0
           });
+        } else {
+          self.setState({
+            isMember: res.isMember,
+          });
         }
+
+
     })
   },
 
@@ -93,7 +99,7 @@ var NewMemberBox = React.createClass({
     {
       data: {
         id: self.props.id,
-        isMember: (self.state.memberInfo) ? true : false,
+        isMember: self.state.isMember,
         subPrice: self.state.subPrice,
         feePrice: self.state.feePrice
       }

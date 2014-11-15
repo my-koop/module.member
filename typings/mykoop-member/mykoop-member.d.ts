@@ -11,11 +11,6 @@ declare module mkmember {
     name: string;
     type: string;
   }
-  export interface MemberInfo {
-    isActive: boolean;
-    isMember: boolean;
-    activeUntil: Date;
-  }
 
   export interface UpdateMember {
     id: number;
@@ -31,7 +26,7 @@ declare module mkmember {
 
     getMemberInfo(
       id,
-      callback: (err: Error, res ?: mkmember.MemberInfo) => void
+      callback: (err: Error, res ?: boolean) => void
     ): void;
 
     updateMemberInfo(

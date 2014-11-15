@@ -4,7 +4,7 @@ import MKOption = require("./classes/MKOption");
 var logger = utils.getLogger(module);
 
 var async = require("async");
-
+var DatabaseError = utils.errors.DatabaseError;
 var ApplicationError = utils.errors.ApplicationError;
 
 class Module extends utils.BaseModule implements mkmember.Module {
@@ -31,35 +31,34 @@ class Module extends utils.BaseModule implements mkmember.Module {
         "SELECT name,value,type FROM `option` where type in ('sub','fee');",
         function(err, rows) {
           cleanup();
-          if (err) {
-            return callback(err, null);
-          }
-          callback(null, rows);
-
+          callback(err && new DatabaseError(err), rows);
       });
     });
 
   }
   getMemberInfo(
     id,
-    callback: (err: Error, res ?: mkmember.MemberInfo) => void
+    callback: (err: Error, res ?: boolean) => void
   ) {
     this.db.getConnection(function(err, connection, cleanup) {
       if(err) {
         return callback(err, null);
       }
       var query = connection.query(
-        "SELECT isActive,isMember,subscriptionExpirationDate as activeUntil FROM member WHERE id = ?",
+        "SELECT (b1.isClosed = 1) as isMember \
+         FROM member as m \
+         LEFT JOIN bill as b1 on (m.feeTransactionId = b1.idbill) \
+         WHERE m.id = 2",
          [id],
         function(err, rows) {
           cleanup();
           if (err) {
-            return callback(err, null);
+            callback(err && new DatabaseError(err), null);
           }
           if(rows.length === 1){
-            callback(null, rows[0])
+            callback(null, true)
           } else {
-            callback(null, null)
+            callback(null, false)
           }
 
       });
@@ -77,18 +76,18 @@ class Module extends utils.BaseModule implements mkmember.Module {
           return callback(err);
         }
         async.waterfall([
-          //Get email from ID
+          function beginTransaction(next) {
+              logger.debug("Begin transaction");
+              connection.beginTransaction(function(err) {
+              next(err && new DatabaseError(err));
+            });
+          },
           function getEmailWithId(next){
             var query = connection.query(
               "SELECT email from user where id = ?",
               [updateInfo.id],
               function(err , rows){
-                if(err){
-                  next(err);
-                } else if (rows.length !== 1){
-                  next(new Error("Didnt get email from id"));
-                }
-                next(null,rows[0].email);
+                next(err && new DatabaseError(err), rows && rows[0].email);
               }
             )
           },
@@ -97,7 +96,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
                 self.transaction.saveNewBill(
                 {
                   total: updateInfo.feePrice,
-                  archiveBill: false,
+                  archiveBill: true,
                   customerEmail : email,
                   items: [{
                         id: -1,
@@ -106,8 +105,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
                   }]
                 }, function( err , res){
                   logger.verbose(res);
-                  logger.verbose(err);
-                    next(err, email , res && res.idBill)
+                    next(err && new DatabaseError(err), email , res && res.idBill)
                 })
               } else {
                 next(null,email,null);
@@ -116,7 +114,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
               self.transaction.saveNewBill(
               {
                 total : updateInfo.subPrice,
-                archiveBill: false,
+                archiveBill: true,
                 customerEmail: email,
                 items: [{
                     id: -1,
@@ -126,27 +124,47 @@ class Module extends utils.BaseModule implements mkmember.Module {
               }, function(err, res){
                 logger.verbose(res);
                   logger.verbose(err);
-                  next(err, feeBillId, res.idBill);
+                  next(err && new DatabaseError(err), feeBillId, res && res.idBill)
               })
-          }, function updateMemberEntry(feeBillId, subBillId, next){
-              var updateData = {
-                feeTransactionId: feeBillId,
-                subscriptionTransactionId: subBillId
-              };
-              var query = connection.query(
-                "UPDATE table user SET ? WHERE id = ?",
-                [updateData,updateInfo.id],
-                function(err, rows){
-                  var myError = null;
-                  if(rows.length === 1 && rows[0].affectedRows !== 1){
-                    myError = new Error("Failed to update member table");
-                  }
-                  callback(err || myError);
+          }, function updateMemberTable(feeBillId, subBillId, next){
+              if(!updateInfo.isMember){
+                  var query = connection.query(
+                    "INSERT INTO member SET id = ?, feeTransactionId = ?, subscriptionTransactionId = ?",
+                    [updateInfo.id, feeBillId, subBillId],
+                    function(err,rows){
+                      logger.verbose("Inserting into member table");
+                      logger.verbose(err);
+                      logger.verbose(rows);
+                      next(err && new DatabaseError(err));
+                  });
+              } else {
+                var query = connection.query(
+                  "UPDATE member SET subscriptionTransactionId = ? WHERE id = ?",
+                  [subBillId, updateInfo.id],
+                  function(err, rows){
+                    logger.verbose("Updating member table");
+                    logger.verbose(err);
+                    logger.verbose(rows);
+                    next(err && new DatabaseError(err) );
+                });
+              }
+          }, function commitTransaction(next) {
+               logger.debug("Commiting transaction");
+                // No errors yet, commit all that
+                connection.commit(function(err) {
+                  next(err && new DatabaseError(err));
                 });
           }
         ], function(err){
+            if(err) {
+              connection.rollback(function() {
+                cleanup();
+                callback(new ApplicationError(err, {},""));
+              });
+              return;
+            }
             cleanup();
-            callback(err);
+            callback(null);
         }); // waterfall
       });//getConnection
     }
