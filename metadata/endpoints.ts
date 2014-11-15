@@ -9,7 +9,7 @@ var endpoints = {
       method: "get"
     },
     updateMemberInfo: {
-      path: "member/updateMemberInfo",
+      path: "/member/updateMemberInfo",
       method: "put"
     }
   }

@@ -25,7 +25,7 @@ export function attachControllers(binder) {
   );
   binder.attach(
     {
-      endPoint: endPoints.members.updateMemberInfo
+      endPoint: endPoints.member.updateMemberInfo
     },
     updateMemberInfo
   );

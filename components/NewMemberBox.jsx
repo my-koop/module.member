@@ -27,9 +27,9 @@ var NewMemberBox = React.createClass({
     return {
       subOptions: {},
       feePrice: null,
-      subPrice: 3,
+      subPrice: "3",
       totalPrice: null,
-      memberInfo: {}
+      memberInfo: null
     }
   },
 
@@ -77,39 +77,51 @@ var NewMemberBox = React.createClass({
           console.error(err);
           return;
         }
-        if(!info){
-          //User is not a member
+        if(info){
           self.setState({
-            memberInfo: null
-          });
-        } else {
-          //User has an entry in member table
-          self.setState({
-            memberInfo : info
+            memberInfo: info,
+            feePrice: 0
           });
         }
-      }
-    )
+    })
   },
 
   onSubmit: function(e){
     e.preventDefault();
-    //Create transaction for new member
-    //Create transaction for sub fee
-    //Check if user already has an open transaction?
+    var self = this;
+    actions.member.updateMemberInfo(
+    {
+      data: {
+        id: self.props.id,
+        isMember: (self.state.memberInfo) ? true : false,
+        subPrice: self.state.subPrice,
+        feePrice: self.state.feePrice
+      }
+    }, function(err){
+      if(err){
+        console.error(err);
+      } else {
+        console.log("update success");
+      }
+    });
+
   },
+
 
   displayFee: function(){
     var display = "";
-    if(this.state.memberInfo.isMember){
+    if(this.state.feePrice === 0){
       display = __("member::memberBoxFeeIsMember");
     } else {
       display = this.state.feePrice + "$";
     }
     return display;
   },
+
+
+
   calculateTotalPrice: function(){
-    var total = parseInt(this.state.subPrice) + (this.state.memberInfo.isMember?0:this.state.feePrice);
+    var total = parseInt(this.state.subPrice) + parseInt(this.state.feePrice);
     return total;
   },
 
@@ -117,8 +129,6 @@ var NewMemberBox = React.createClass({
 
 
   render: function() {
-    var name = this.props.displayName || this.props.name || "Empty";
-
    var subOptions = _.map(this.state.subOptions,function(option){
       return (
           <option value={option.value}>
@@ -150,7 +160,7 @@ var NewMemberBox = React.createClass({
               </BSInput>
             </BSCol>
             <BSCol xs={2} md={4}>
-              <span> {this.state.subPrice + "$"} </span>
+              {this.state.subPrice + "$"}
             </BSCol>
           </BSRow>
           <BSRow>

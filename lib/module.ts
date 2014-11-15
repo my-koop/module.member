@@ -1,7 +1,7 @@
 import utils = require("mykoop-utils");
 import controllerList = require("./controllers/index");
 import MKOption = require("./classes/MKOption");
-
+var logger = utils.getLogger(module);
 
 var async = require("async");
 
@@ -13,7 +13,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
   init() {
     var db = <mkdatabase.Module>this.getModuleManager().get("database");
     var routerModule = <mykoop.Router>this.getModuleManager().get("router");
-    var transaction = <mktransaction.Module> this.getModuleManager().get("mykoop-transaction");
+    var transaction = <mktransaction.Module> this.getModuleManager().get("transaction");
     controllerList.attachControllers(new utils.ModuleControllersBinder(this));
 
     this.db = db;
@@ -105,7 +105,9 @@ class Module extends utils.BaseModule implements mkmember.Module {
                         quantity: 1
                   }]
                 }, function( err , res){
-                    next(err, email ,res.idBill)
+                  logger.verbose(res);
+                  logger.verbose(err);
+                    next(err, email , res && res.idBill)
                 })
               } else {
                 next(null,email,null);
@@ -122,6 +124,8 @@ class Module extends utils.BaseModule implements mkmember.Module {
                     quantity: 1
                 }]
               }, function(err, res){
+                logger.verbose(res);
+                  logger.verbose(err);
                   next(err, feeBillId, res.idBill);
               })
           }, function updateMemberEntry(feeBillId, subBillId, next){
