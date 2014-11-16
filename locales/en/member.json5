@@ -4,6 +4,7 @@
   "memberBoxDropdown6mth": "6 Months",
   "memberBoxDropdown1yr": "1 Year",
   "memberBoxDropdown" : "Subscription Duration",
-  "memberBoxFeeMessage": "Fee to become a member",
-  "memberBoxFeeIsMember": "Already a member"
+  "memberBoxFeeMessage": "Membership Fee",
+  "memberBoxFeeIsMember": "Already a member",
+  "memberAdhesionBoxTab": "Membership"
 }

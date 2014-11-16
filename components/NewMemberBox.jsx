@@ -171,20 +171,18 @@ var NewMemberBox = React.createClass({
           </BSRow>
           <BSRow>
             <BSCol xs={2} md={4}>
-              <span> NOTICE MESSAGE avec date dexpiration </span>
-            </BSCol>
-            <BSCol xs={2} md={4}>
               <span> Total: {this.calculateTotalPrice()}$ </span>
             </BSCol>
           </BSRow>
           <BSRow>
-            <BSInput
-              type="submit"
-              bsStyle="primary"
-              bsSize="large"
-              value={__("user::register_submit_button")}
-              className="pull-right"
-            />
+            <BSCol>
+              <BSInput
+                type="submit"
+                bsStyle="primary"
+                bsSize="large"
+                value={__("user::register_submit_button")}
+              />
+            </BSCol>
           </BSRow>
         </BSGrid>
       </form>

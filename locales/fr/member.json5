@@ -3,7 +3,8 @@
   "memberBoxDropdown3mth": "3 Mois",
   "memberBoxDropdown6mth": "6 Mois",
   "memberBoxDropdown1yr": "1 An",
-  "memberBoxDropdown" : "Duree de la cotisation",
-  "memberBoxFeeMessage": "Coût d'adhésion à la coop",
-  "memberBoxFeeIsMember": "Déjà Membre"
+  "memberBoxDropdown" : "Durée de la cotisation",
+  "memberBoxFeeMessage": "Coût d'adhésion",
+  "memberBoxFeeIsMember": "Déjà Membre",
+  "memberAdhesionBoxTab": "Information membre"
 }
