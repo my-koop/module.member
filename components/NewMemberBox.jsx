@@ -27,9 +27,10 @@ var NewMemberBox = React.createClass({
     return {
       subOptions: {},
       feePrice: null,
-      subPrice: "3",
+      subPrice: null,
       totalPrice: null,
-      memberInfo: null
+      memberInfo: null,
+
     }
   },
 
@@ -53,13 +54,14 @@ var NewMemberBox = React.createClass({
             } else {
               var option = {};
               option["name"] = res[row].name;
-              option["value"] = res[row].value;
+              option["value"] = parseInt(res[row].value);
               options.push(option);
             }
           }
           self.setState({
             subOptions: options,
-            feePrice : price
+            feePrice : price,
+            subPrice : _.min(options,'value').value
           })
         }
       }
@@ -87,8 +89,6 @@ var NewMemberBox = React.createClass({
             isMember: res.isMember,
           });
         }
-
-
     })
   },
 
@@ -135,7 +135,7 @@ var NewMemberBox = React.createClass({
 
 
   render: function() {
-   var subOptions = _.map(this.state.subOptions,function(option){
+    var subOptions = _.map(this.state.subOptions,function(option){
       return (
           <option value={option.value}>
             {__("member::memberBoxDropdown" + option.name )}
@@ -158,7 +158,6 @@ var NewMemberBox = React.createClass({
             <BSCol xs={2} md={4}>
               <BSInput
                 type="select"
-                defaultValue="3"
                 label={__("member::memberBoxDropdown")}
                 valueLink={this.linkState("subPrice")}
               >
