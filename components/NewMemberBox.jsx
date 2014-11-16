@@ -7,6 +7,7 @@ var BSCol = require("react-bootstrap/Col");
 var BSGrid = require("react-bootstrap/Grid");
 var BSRow = require("react-bootstrap/Row");
 var BSInput = require("react-bootstrap/Input");
+var BSAlert = require("react-bootstrap/Alert");
 var routeData = require("dynamic-metadata").routes;
 var BSButton = require("react-bootstrap/Button");
 var actions = require("actions");
@@ -30,7 +31,8 @@ var NewMemberBox = React.createClass({
       subPrice: null,
       totalPrice: null,
       memberInfo: null,
-
+      alertMessage: "",
+      alertStyle: null
     }
   },
 
@@ -105,14 +107,21 @@ var NewMemberBox = React.createClass({
       }
     }, function(err){
       if(err){
-        console.error(err);
+        self.setMessage(__("member::memberBoxFailure"), isError = true);
       } else {
-        console.log("update success");
+        self.setMessage(__("member::memberBoxSuccess"), isError = false);
       }
     });
 
   },
 
+  setMessage: function(message, isError){
+    var style = (isError) ? "warning" : "success";
+    this.setState({
+      alertMessage: message,
+      alertStyle: style
+    })
+  },
 
   displayFee: function(){
     var display = "";
@@ -124,15 +133,10 @@ var NewMemberBox = React.createClass({
     return display;
   },
 
-
-
   calculateTotalPrice: function(){
     var total = parseInt(this.state.subPrice) + parseInt(this.state.feePrice);
     return total;
   },
-
-
-
 
   render: function() {
     var subOptions = _.map(this.state.subOptions,function(option){
@@ -144,47 +148,54 @@ var NewMemberBox = React.createClass({
     });
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <BSGrid>
-          <BSRow>
-            <BSCol xs={2} md={4}>
-             {__("member::memberBoxFeeMessage")}
-            </BSCol>
-            <BSCol xs={2} md={4}>
-              {this.displayFee()}
-            </BSCol>
-          </BSRow>
-          <BSRow>
-            <BSCol xs={2} md={4}>
-              <BSInput
-                type="select"
-                label={__("member::memberBoxDropdown")}
-                valueLink={this.linkState("subPrice")}
-              >
-                {subOptions}
-              </BSInput>
-            </BSCol>
-            <BSCol xs={2} md={4}>
-              {this.state.subPrice + "$"}
-            </BSCol>
-          </BSRow>
-          <BSRow>
-            <BSCol xs={2} md={4}>
-              <span> Total: {this.calculateTotalPrice()}$ </span>
-            </BSCol>
-          </BSRow>
-          <BSRow>
-            <BSCol>
-              <BSInput
-                type="submit"
-                bsStyle="primary"
-                bsSize="large"
-                value={__("user::register_submit_button")}
-              />
-            </BSCol>
-          </BSRow>
-        </BSGrid>
-      </form>
+      <div>
+        { this.state.alertMessage ?
+            <BSAlert bsStyle={this.state.alertStyle}>
+              {this.state.alertMessage}
+            </BSAlert>
+          : null }
+        <form onSubmit={this.onSubmit}>
+          <BSGrid>
+            <BSRow>
+              <BSCol xs={2} md={4}>
+               {__("member::memberBoxFeeMessage")}
+              </BSCol>
+              <BSCol xs={2} md={4}>
+                {this.displayFee()}
+              </BSCol>
+            </BSRow>
+            <BSRow>
+              <BSCol xs={2} md={4}>
+                <BSInput
+                  type="select"
+                  label={__("member::memberBoxDropdown")}
+                  valueLink={this.linkState("subPrice")}
+                >
+                  {subOptions}
+                </BSInput>
+              </BSCol>
+              <BSCol xs={2} md={4}>
+                {this.state.subPrice + "$"}
+              </BSCol>
+            </BSRow>
+            <BSRow>
+              <BSCol xs={2} md={4}>
+                <span> Total: {this.calculateTotalPrice()}$ </span>
+              </BSCol>
+            </BSRow>
+            <BSRow>
+              <BSCol>
+                <BSInput
+                  type="submit"
+                  bsStyle="primary"
+                  bsSize="large"
+                  value={__("user::register_submit_button")}
+                />
+              </BSCol>
+            </BSRow>
+          </BSGrid>
+        </form>
+      </div>
     );
   }
 });

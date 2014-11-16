@@ -6,5 +6,7 @@
   "memberBoxDropdown" : "Durée de la cotisation",
   "memberBoxFeeMessage": "Coût d'adhésion",
   "memberBoxFeeIsMember": "Déjà Membre",
-  "memberAdhesionBoxTab": "Information membre"
+  "memberAdhesionBoxTab": "Information membre",
+  "memberBoxFailure" : "La requête a échoué, réessayez plus tard",
+  "memberBoxSuccess" : "La demande a été enregistrée dans le système, veillez acquitter les frais à l'atelier"
 }
