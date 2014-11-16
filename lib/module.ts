@@ -28,7 +28,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
         return callback(err, null);
       }
       var query = connection.query(
-        "SELECT name,value,type FROM `option` where type in ('sub','fee');",
+        "SELECT name,value,type FROM `option` WHERE type IN ('sub','fee') ORDER BY CAST(value AS UNSIGNED) asc;",
         function(err, rows) {
           cleanup();
           callback(err && new DatabaseError(err), rows);
