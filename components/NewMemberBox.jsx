@@ -46,7 +46,7 @@ var NewMemberBox = React.createClass({
       {},
       function(err, res){
         if(err){
-          console.error(err);
+          self.setMessage(__("member::memberBoxFailure"), isError = true);
           return;
         } else {
           console.log(res);
@@ -78,7 +78,7 @@ var NewMemberBox = React.createClass({
       },
       function(err, res){
         if(err){
-          console.error(err);
+          self.setMessage(__("member::memberBoxFailure"), isError = true);
           return;
         }
         if(res.isMember){

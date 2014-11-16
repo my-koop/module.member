@@ -45,10 +45,10 @@ class Module extends utils.BaseModule implements mkmember.Module {
         return callback(err, null);
       }
       var query = connection.query(
-        "SELECT (b1.isClosed = 1) as isMember \
+        "SELECT (b1.isClosed = 1) \
          FROM member as m \
          LEFT JOIN bill as b1 on (m.feeTransactionId = b1.idbill) \
-         WHERE m.id = 2",
+         WHERE m.id = ?",
          [id],
         function(err, rows) {
           cleanup();
@@ -70,15 +70,14 @@ class Module extends utils.BaseModule implements mkmember.Module {
     callback: (err: Error) =>void
   ) {
     var self = this;
-      //Get email from ID
       this.db.getConnection(function(err, connection, cleanup) {
         if(err) {
           return callback(err);
         }
         async.waterfall([
           function beginTransaction(next) {
-              logger.debug("Begin transaction");
-              connection.beginTransaction(function(err) {
+            logger.debug("Begin transaction");
+            connection.beginTransaction(function(err) {
               next(err && new DatabaseError(err));
             });
           },
@@ -108,9 +107,9 @@ class Module extends utils.BaseModule implements mkmember.Module {
                     next(err && new DatabaseError(err), email , res && res.idBill)
                 })
               } else {
-                next(null,email,null);
+                next(null, email, null);
               }
-          }, function createBillForSub( email, feeBillId, next){
+          }, function createBillForSub(email, feeBillId, next){
               self.transaction.saveNewBill(
               {
                 total : updateInfo.subPrice,
@@ -123,15 +122,15 @@ class Module extends utils.BaseModule implements mkmember.Module {
                 }]
               }, function(err, res){
                 logger.verbose(res);
-                  logger.verbose(err);
-                  next(err && new DatabaseError(err), feeBillId, res && res.idBill)
+                logger.verbose(err);
+                next(err && new DatabaseError(err), feeBillId, res && res.idBill)
               })
           }, function updateMemberTable(feeBillId, subBillId, next){
               if(!updateInfo.isMember){
                   var query = connection.query(
                     "INSERT INTO member SET id = ?, feeTransactionId = ?, subscriptionTransactionId = ?",
                     [updateInfo.id, feeBillId, subBillId],
-                    function(err,rows){
+                    function(err, rows){
                       logger.verbose("Inserting into member table");
                       logger.verbose(err);
                       logger.verbose(rows);
