@@ -73,7 +73,7 @@ var NewMemberBox = React.createClass({
     actions.member.getMemberInfo(
       {
         data: {
-          id: self.props.id
+          id: self.props.userId
         }
       },
       function(err, res){
@@ -100,7 +100,7 @@ var NewMemberBox = React.createClass({
     actions.member.updateMemberInfo(
     {
       data: {
-        id: self.props.id,
+        id: self.props.userId,
         isMember: self.state.isMember,
         subPrice: self.state.subPrice,
         feePrice: self.state.feePrice
