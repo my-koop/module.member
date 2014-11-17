@@ -7,4 +7,4 @@
 /// <reference path="mykoop-database/mykoop-database.d.ts" />
 /// <reference path="async/async.d.ts" />
 /// <reference path="../node_modules/mykoop-logger/typings/mykoop-logger/mykoop-logger.d.ts" />
-/// <reference path="../node_modules/mykoop-transaction/typings/mykoop-transaction/mykoop-transaction.d.ts" />
+/// <reference path="mykoop-transaction/mykoop-transaction.d.ts" />

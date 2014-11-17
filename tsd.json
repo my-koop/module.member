@@ -22,6 +22,9 @@
     },
     "async/async.d.ts": {
       "commit": "22499b9683686c3d424137d6e395a0106d5a6090"
+    },
+    "mykoop-transaction/mykoop-transaction.d.ts": {
+      "commit": "01e768f43e91822e5b18927ef05305db9d1be4d5"
     }
   },
   "dependencies": {
