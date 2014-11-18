@@ -1,6 +1,5 @@
 import utils = require("mykoop-utils");
 import controllerList = require("./controllers/index");
-import MKOption = require("./classes/MKOption");
 var logger = utils.getLogger(module);
 
 var async = require("async");
@@ -21,7 +20,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
   }
 
   getSubOptions(
-    callback: (err: Error, res ?: mkmember.MKOption[]) => void
+    callback: (err: Error, res ?: mkmember.MKOption) => void
   ) {
     this.db.getConnection(function(err, connection, cleanup) {
       if(err) {
@@ -31,7 +30,23 @@ class Module extends utils.BaseModule implements mkmember.Module {
         "SELECT name,value,type FROM `option` WHERE type IN ('sub','fee') ORDER BY CAST(value AS UNSIGNED) asc;",
         function(err, rows) {
           cleanup();
-          callback(err && new DatabaseError(err), rows);
+          var options = [];
+          for(var row in rows){
+            if(rows[row].type == "fee"){
+              var price = rows[row].value;
+            } else {
+              var option = {};
+              option["name"] = rows[row].name;
+              option["value"] = parseInt(rows[row].value);
+              options.push(option);
+            }
+          }
+          var res = {
+            options: options,
+            price: price
+          }
+          console.log(res);
+          callback(err && new DatabaseError(err), res);
       });
     });
 

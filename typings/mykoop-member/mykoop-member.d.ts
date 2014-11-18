@@ -6,10 +6,14 @@
 /// <reference path="../mykoop/mykoop.d.ts" />
 declare module mkmember {
 
-  export interface MKOption {
-    value: string;
+
+  interface Option {
     name: string;
-    type: string;
+    value: string;
+  }
+  export interface MKOption {
+    options: Array<Option>;
+    price: number;
   }
 
   export interface UpdateMember {
@@ -21,7 +25,7 @@ declare module mkmember {
 
   export interface Module extends mykoop.IModule {
     getSubOptions(
-      callback: (err: Error, ret: mkmember.MKOption[]) => void
+      callback: (err: Error, ret: mkmember.MKOption) => void
     ): void;
 
     getMemberInfo(

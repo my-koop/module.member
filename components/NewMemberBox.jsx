@@ -33,32 +33,17 @@ var NewMemberBox = React.createClass({
 
   componentWillMount: function(){
     var self = this;
-    var price;
-    var options = [];
-
     //Getting fee and subscriptions costs
     actions.member.getSubOptions(
-      {},
       function(err, res){
         if(err){
           self.setMessage(__("member::memberBoxFailure"), isError = true);
           return;
         } else {
-          console.log(res);
-          for(var row in res){
-            if(res[row].type == "fee"){
-              price = res[row].value;
-            } else {
-              var option = {};
-              option["name"] = res[row].name;
-              option["value"] = parseInt(res[row].value);
-              options.push(option);
-            }
-          }
           self.setState({
-            subOptions: options,
-            feePrice : price,
-            subPrice : _.min(options,'value').value
+            subOptions: res.options,
+            feePrice : res.price,
+            subPrice : _.min(res.options, 'value').value
           })
         }
       }
@@ -76,16 +61,11 @@ var NewMemberBox = React.createClass({
           self.setMessage(__("member::memberBoxFailure"), isError = true);
           return;
         }
-        if(res.isMember){
-          self.setState({
-            isMember: res.isMember,
-            feePrice: 0
-          });
-        } else {
-          self.setState({
-            isMember: res.isMember,
-          });
-        }
+        self.setState({
+          isMember: res.isMember,
+          feePrice: (res.isMember ? 0 : self.state.feePrice)
+        });
+
     })
   },
 
@@ -133,7 +113,7 @@ var NewMemberBox = React.createClass({
   },
 
   render: function() {
-    var subOptions = _.map(this.state.subOptions,function(option){
+    var subOptions = _.map(this.state.subOptions, function(option){
       return (
           <option value={option.value}>
             {__("member::memberBoxDropdown" + option.name )}
