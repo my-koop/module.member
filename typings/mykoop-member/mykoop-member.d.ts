@@ -18,7 +18,6 @@ declare module mkmember {
 
   export interface UpdateMember {
     id: number;
-    isMember: boolean;
     subPrice: number;
     feePrice: number;
   }

@@ -4,7 +4,6 @@ function updateMemberInfo(req: express.Request, res: express.Response) {
 
   var info = {
     id: req.param("id"),
-    isMember: req.param("isMember"),
     subPrice: req.param("subPrice"),
     feePrice: req.param("feePrice")
   }
