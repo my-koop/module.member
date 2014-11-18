@@ -4,7 +4,7 @@ var BSCol = require("react-bootstrap/Col");
 var BSGrid = require("react-bootstrap/Grid");
 var BSRow = require("react-bootstrap/Row");
 var BSInput = require("react-bootstrap/Input");
-var BSAlert = require("react-bootstrap/Alert");
+var MKAlert = require("mykoop-core/components/Alert");
 var actions = require("actions");
 var _ = require("lodash");
 
@@ -26,8 +26,8 @@ var NewMemberBox = React.createClass({
       subPrice: null,
       totalPrice: null,
       memberInfo: null,
-      alertMessage: null,
-      alertStyle: null
+      errorMessage: null,
+      successMessage: null
     }
   },
 
@@ -111,10 +111,9 @@ var NewMemberBox = React.createClass({
   },
 
   setMessage: function(message, isError){
-    var style = (isError) ? "warning" : "success";
     this.setState({
-      alertMessage: message,
-      alertStyle: style
+      errorMessage: (isError? message : null),
+      successMessage: (isError? message : null)
     })
   },
 
@@ -144,11 +143,12 @@ var NewMemberBox = React.createClass({
 
     return (
       <div>
-        { this.state.alertMessage ?
-            <BSAlert bsStyle={this.state.alertStyle}>
-              {this.state.alertMessage}
-            </BSAlert>
-          : null }
+        <MKAlert bsStyle="danger" permanent>
+          {this.state.errorMessage}
+        </MKAlert>
+        <MKAlert bsStyle="success">
+          {this.state.successMessage}
+        </MKAlert>
         <form onSubmit={this.onSubmit}>
           <BSGrid>
             <BSRow>
