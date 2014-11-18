@@ -35,7 +35,7 @@ var NewMemberBox = React.createClass({
   componentWillMount: function(){
     var self = this;
     //Getting fee and subscriptions costs
-    actions.member.getSubOptions(
+    actions.member.getSubcriptionOptions(
       function(err, res){
         if(err){
           self.setMessage(__("member::memberBoxRequest"), isError = true);
