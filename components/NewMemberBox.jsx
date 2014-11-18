@@ -50,7 +50,7 @@ var NewMemberBox = React.createClass({
         }
       }
     )
-    actions.member.getMemberInfo(
+    actions.member.getIsUserAMember(
       {
         data: {
           id: self.props.userId

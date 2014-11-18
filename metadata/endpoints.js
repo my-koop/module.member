@@ -4,8 +4,8 @@ var endpoints = {
             path: "/member/getSubcriptionOptions",
             method: "get"
         },
-        getMemberInfo: {
-            path: "/member/getMemberInfo",
+        getIsUserAMember: {
+            path: "/member/getIsUserAMember",
             method: "get"
         },
         updateMemberInfo: {

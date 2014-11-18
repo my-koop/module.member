@@ -28,7 +28,7 @@ declare module mkmember {
       callback: (err: Error, ret: mkmember.MKOption) => void
     ): void;
 
-    getMemberInfo(
+    getIsUserAMember(
       id,
       callback: (err: Error, res ?: boolean) => void
     ): void;

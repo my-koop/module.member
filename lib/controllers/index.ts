@@ -5,7 +5,7 @@ import validation = require("../validation/index");
 
 // Controllers.
 import getSubcriptionOptions = require("./getSubcriptionOptions");
-import getMemberInfo = require("./getMemberInfo");
+import getIsUserAMember = require("./getIsUserAMember");
 import updateMemberInfo = require("./updateMemberInfo");
 
 var endPoints = metaData.endpoints;
@@ -19,9 +19,9 @@ export function attachControllers(binder) {
   );
   binder.attach(
     {
-      endPoint: endPoints.member.getMemberInfo
+      endPoint: endPoints.member.getIsUserAMember
     },
-    getMemberInfo
+    getIsUserAMember
   );
   binder.attach(
     {

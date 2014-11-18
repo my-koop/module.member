@@ -51,7 +51,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
     });
 
   }
-  getMemberInfo(
+  getIsUserAMember(
     id,
     callback: (err: Error, res ?: boolean) => void
   ) {
