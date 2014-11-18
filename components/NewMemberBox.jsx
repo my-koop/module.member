@@ -1,15 +1,10 @@
-// Good old React Component!
-
 var React = require("react");
 var PropTypes = React.PropTypes;
-var Link = require("react-router").Link;
 var BSCol = require("react-bootstrap/Col");
 var BSGrid = require("react-bootstrap/Grid");
 var BSRow = require("react-bootstrap/Row");
 var BSInput = require("react-bootstrap/Input");
 var BSAlert = require("react-bootstrap/Alert");
-var routeData = require("dynamic-metadata").routes;
-var BSButton = require("react-bootstrap/Button");
 var actions = require("actions");
 var _ = require("lodash");
 
@@ -21,17 +16,17 @@ var NewMemberBox = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   propTypes : {
-    displayName : PropTypes.string
+    userId: PropTypes.number.isRequired
   },
 
   getInitialState: function() {
     return {
-      subOptions: {},
+      subOptions: [],
       feePrice: null,
       subPrice: null,
       totalPrice: null,
       memberInfo: null,
-      alertMessage: "",
+      alertMessage: null,
       alertStyle: null
     }
   },
@@ -73,7 +68,7 @@ var NewMemberBox = React.createClass({
     actions.member.getMemberInfo(
       {
         data: {
-          id: self.props.id
+          id: self.props.userId
         }
       },
       function(err, res){
@@ -100,7 +95,7 @@ var NewMemberBox = React.createClass({
     actions.member.updateMemberInfo(
     {
       data: {
-        id: self.props.id,
+        id: self.props.userId,
         isMember: self.state.isMember,
         subPrice: self.state.subPrice,
         feePrice: self.state.feePrice
