@@ -33,7 +33,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
           var options = [];
           for(var row in rows){
             if(rows[row].type == "fee"){
-              var price = rows[row].value;
+              var price = parseInt(rows[row].value);
             } else {
               var option = {};
               option["name"] = rows[row].name;

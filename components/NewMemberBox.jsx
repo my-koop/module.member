@@ -10,6 +10,7 @@ var _ = require("lodash");
 
 // Use this to provide localization strings.
 var __ = require("language").__;
+var formatMoney = require("language").formatMoney;
 
 var NewMemberBox = React.createClass({
 
@@ -25,7 +26,7 @@ var NewMemberBox = React.createClass({
       feePrice: null,
       subPrice: null,
       totalPrice: null,
-      memberInfo: null,
+      isMember: null,
       errorMessage: null,
       successMessage: null
     }
@@ -40,6 +41,7 @@ var NewMemberBox = React.createClass({
           self.setMessage(__("member::memberBoxFailure"), isError = true);
           return;
         } else {
+          console.log(res);
           self.setState({
             subOptions: res.options,
             feePrice : res.price,
@@ -48,8 +50,6 @@ var NewMemberBox = React.createClass({
         }
       }
     )
-
-    //Getting member information for this user
     actions.member.getMemberInfo(
       {
         data: {
@@ -63,10 +63,11 @@ var NewMemberBox = React.createClass({
         }
         self.setState({
           isMember: res.isMember,
-          feePrice: (res.isMember ? 0 : self.state.feePrice)
+          feePrice: (res.isMember) ? 0 : self.state.feePrice
         });
 
     })
+
   },
 
   onSubmit: function(e){
@@ -99,12 +100,16 @@ var NewMemberBox = React.createClass({
 
   getFeeString: function(){
     var display = "";
-    if(this.state.feePrice === 0){
+    if(this.state.isMember){
       display = __("member::memberBoxFeeIsMember");
     } else {
-      display = __.formatMoney(this.state.feePrice);
+      display = formatMoney((this.state.feePrice? this.state.feePrice : 0));
     }
     return display;
+  },
+
+  getSubscriptionString: function() {
+    return formatMoney(this.state.subPrice? parseInt(this.state.subPrice) : 0 );
   },
 
   calculateTotalPrice: function(){
@@ -150,7 +155,7 @@ var NewMemberBox = React.createClass({
                 </BSInput>
               </BSCol>
               <BSCol xs={2} md={4}>
-                { formatMoney(this.state.subPrice) }
+                { this.getSubscriptionString() }
               </BSCol>
             </BSRow>
             <BSRow>
