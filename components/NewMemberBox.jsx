@@ -109,7 +109,7 @@ var NewMemberBox = React.createClass({
 
   calculateTotalPrice: function(){
     var total = parseInt(this.state.subPrice) + parseInt(this.state.feePrice);
-    return total;
+    return formatMoney(total);
   },
 
   render: function() {
@@ -133,7 +133,7 @@ var NewMemberBox = React.createClass({
           <BSGrid>
             <BSRow>
               <BSCol xs={2} md={4}>
-               {__("member::memberBoxFeeMessage")}
+                {__("member::memberBoxFeeMessage")}
               </BSCol>
               <BSCol xs={2} md={4}>
                 {this.getFeeString()}
@@ -150,12 +150,12 @@ var NewMemberBox = React.createClass({
                 </BSInput>
               </BSCol>
               <BSCol xs={2} md={4}>
-                {this.state.subPrice + "$"}
+                { formatMoney(this.state.subPrice) }
               </BSCol>
             </BSRow>
             <BSRow>
               <BSCol xs={2} md={4}>
-                <span> Total: {this.calculateTotalPrice()}$ </span>
+                <span> { __("member::memberBoxTotal") + ":" +  this.calculateTotalPrice() } </span>
               </BSCol>
             </BSRow>
             <BSRow>
