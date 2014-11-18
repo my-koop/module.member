@@ -2,7 +2,11 @@
   "name": "mykoop-member",
   "role": "member",
   "mykoop": {
-    "dependencies": {}
+    "dependencies": {
+      "database" : "^1.0.0",
+      "user" : "^1.0.0-rc",
+      "transaction" : "^1.0.0-rc"
+    }
   },
   "version": "1.0.0-rc",
   "description": "member module for My Koop",
@@ -23,7 +27,6 @@
   "dependencies": {
     "async": "^0.9.0",
     "mykoop-logger": "git://github.com/my-koop/module.logger",
-    "mykoop-transaction": "git://github.com/my-koop/module.transaction#rc",
     "mykoop-utils": "git://github.com/my-koop/module.utils#rc",
     "mykoop-database": "git://github.com/my-koop/module.database#rc"
   }
