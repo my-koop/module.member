@@ -70,11 +70,8 @@ class Module extends utils.BaseModule implements mkmember.Module {
           if (err) {
             callback(err && new DatabaseError(err), null);
           }
-          if(rows.length === 1){
-            callback(null, true)
-          } else {
-            callback(null, false)
-          }
+          callback(null, rows.length === 1)
+
 
       });
     });
