@@ -19,7 +19,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
     this.transaction = transaction;
   }
 
-  getSubOptions(
+  getSubcriptionOptions(
     callback: (err: Error, res ?: mkmember.MKOption) => void
   ) {
     this.db.getConnection(function(err, connection, cleanup) {

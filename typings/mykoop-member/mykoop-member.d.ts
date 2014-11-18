@@ -24,7 +24,7 @@ declare module mkmember {
   }
 
   export interface Module extends mykoop.IModule {
-    getSubOptions(
+    getSubcriptionOptions(
       callback: (err: Error, ret: mkmember.MKOption) => void
     ): void;
 

@@ -1,7 +1,7 @@
 import express = require("express");
 
-function getSubOptions(req: express.Request, res: express.Response) {
-  this.getSubOptions(function(err, ret) {
+function getSubcriptionOptions(req: express.Request, res: express.Response) {
+  this.getSubcriptionOptions(function(err, ret) {
     if (err) {
       return res.error(err);
     }
@@ -13,5 +13,5 @@ function getSubOptions(req: express.Request, res: express.Response) {
   });
 };
 
-export = getSubOptions;
+export = getSubcriptionOptions;
 

@@ -1,7 +1,7 @@
 var endpoints = {
   member: {
-    getSubOptions: {
-      path: "/member/getSubOptions",
+    getSubcriptionOptions: {
+      path: "/member/getSubcriptionOptions",
       method:"get"
     },
     getMemberInfo: {

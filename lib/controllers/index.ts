@@ -4,7 +4,7 @@ import utils = require("mykoop-utils");
 import validation = require("../validation/index");
 
 // Controllers.
-import getSubOptions = require("./getSubOptions");
+import getSubcriptionOptions = require("./getSubcriptionOptions");
 import getMemberInfo = require("./getMemberInfo");
 import updateMemberInfo = require("./updateMemberInfo");
 
@@ -13,9 +13,9 @@ var endPoints = metaData.endpoints;
 export function attachControllers(binder) {
   binder.attach(
     {
-      endPoint: endPoints.member.getSubOptions
+      endPoint: endPoints.member.getSubcriptionOptions
     },
-    getSubOptions
+    getSubcriptionOptions
   );
   binder.attach(
     {
