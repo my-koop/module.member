@@ -1,8 +1,8 @@
 {
-  "memberBoxDropdown1mth": "1 Mois",
-  "memberBoxDropdown3mth": "3 Mois",
-  "memberBoxDropdown6mth": "6 Mois",
-  "memberBoxDropdown1yr": "1 An",
+  "memberBoxDropdown_1mth": "1 Mois",
+  "memberBoxDropdown_3mth": "3 Mois",
+  "memberBoxDropdown_6mth": "6 Mois",
+  "memberBoxDropdown_1yr": "1 An",
   "memberBoxDropdown" : "Durée de la cotisation",
   "memberBoxFeeMessage": "Coût d'adhésion",
   "memberBoxFeeIsMember": "Déjà Membre",

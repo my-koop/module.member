@@ -97,12 +97,12 @@ var NewMemberBox = React.createClass({
     })
   },
 
-  displayFee: function(){
+  getFeeString: function(){
     var display = "";
     if(this.state.feePrice === 0){
       display = __("member::memberBoxFeeIsMember");
     } else {
-      display = this.state.feePrice + "$";
+      display = __.formatMoney(this.state.feePrice);
     }
     return display;
   },
@@ -113,10 +113,10 @@ var NewMemberBox = React.createClass({
   },
 
   render: function() {
-    var subOptions = _.map(this.state.subOptions, function(option){
+    var subOptions = _.map(this.state.subOptions, function(option, key){
       return (
-          <option value={option.value}>
-            {__("member::memberBoxDropdown" + option.name )}
+          <option key={key} value={option.value}>
+            {__("member::memberBoxDropdown", {context : option.name } )}
           </option>
         );
     });
@@ -136,7 +136,7 @@ var NewMemberBox = React.createClass({
                {__("member::memberBoxFeeMessage")}
               </BSCol>
               <BSCol xs={2} md={4}>
-                {this.displayFee()}
+                {this.getFeeString()}
               </BSCol>
             </BSRow>
             <BSRow>
