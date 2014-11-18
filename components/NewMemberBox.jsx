@@ -38,7 +38,7 @@ var NewMemberBox = React.createClass({
     actions.member.getSubOptions(
       function(err, res){
         if(err){
-          self.setMessage(__("member::memberBoxFailure"), isError = true);
+          self.setMessage(__("member::memberBoxRequest"), isError = true);
           return;
         } else {
           console.log(res);
@@ -58,7 +58,7 @@ var NewMemberBox = React.createClass({
       },
       function(err, res){
         if(err){
-          self.setMessage(__("member::memberBoxFailure"), isError = true);
+          self.setMessage(__("member::memberBoxRequest"), isError = true);
           return;
         }
         self.setState({
@@ -82,16 +82,14 @@ var NewMemberBox = React.createClass({
         feePrice: self.state.feePrice
       }
     }, function(err){
-      if(err){
-        self.setMessage(__("member::memberBoxFailure"), isError = true);
-      } else {
-        self.setMessage(__("member::memberBoxSuccess"), isError = false);
-      }
+        self.setMessage("member::memberBoxRequest"), isError = !!err);
     });
 
   },
 
-  setMessage: function(message, isError){
+  setMessage: function(localesKey, isError){
+    var message = __("localesKey", { context: isError? "fail": "success" })
+
     this.setState({
       errorMessage: (isError? message : null),
       successMessage: (isError? message : null)

@@ -7,7 +7,7 @@
   "memberBoxFeeMessage": "Coût d'adhésion",
   "memberBoxFeeIsMember": "Déjà Membre",
   "memberAdhesionBoxTab": "Information membre",
-  "memberBoxFailure" : "La requête a échoué, réessayez plus tard",
-  "memberBoxSuccess" : "La demande a été enregistrée dans le système, veillez acquitter les frais à l'atelier",
+  "memberBoxRequest_fail" : "La requête a échoué, réessayez plus tard",
+  "memberBoxRequest_success" : "La demande a été enregistrée dans le système, veillez acquitter les frais à l'atelier",
   "memberBoxTotal" : "Total"
 }
