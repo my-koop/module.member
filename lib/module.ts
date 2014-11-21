@@ -83,12 +83,11 @@ class Module extends utils.BaseModule implements mkmember.Module {
     callback: (err: Error) =>void
   ) {
       var self = this;
+      logger.verbose(updateInfo);
       this.db.getConnection(function(err, connection, cleanup) {
         if(err) {
           return callback(err);
         }
-        var MySqlHelper = utils.MySqlHelper;
-        MySqlHelper.setConnection(cleanup, connection);
         async.waterfall([
           function getEmailWithId(next){
             var query = connection.query(
@@ -119,7 +118,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
                     next(err && new DatabaseError(err), email, isMember , res && res.idBill)
                 })
               } else {
-                next(null, email, null);
+                next(null, email, isMember, null);
               }
           }, function createBillForSub(email, isMember, feeBillId, next){
               self.transaction.saveNewBill(

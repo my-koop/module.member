@@ -8,7 +8,7 @@ function updateMemberInfo(req: express.Request, res: express.Response) {
     feePrice: req.param("feePrice")
   }
 
-  this.updateMemberInfo(info, function(err, options) {
+  this.updateMemberInfo(info, function(err) {
     if (err) {
       return res.error(err);
     }

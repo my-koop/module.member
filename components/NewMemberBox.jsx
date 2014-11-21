@@ -80,17 +80,16 @@ var NewMemberBox = React.createClass({
         feePrice: self.state.feePrice
       }
     }, function(err){
-        self.setMessage("member::memberBoxRequest", isError = !!err);
+        self.setMessage("member::memberBoxRequest", !!err);
     });
 
   },
 
   setMessage: function(localesKey, isError){
-    var message = __("localesKey", { context: isError? "fail": "success" })
-
+    var message = __(localesKey, { context: isError? "fail": "success" })
     this.setState({
-      errorMessage: (isError? message : null),
-      successMessage: (isError? message : null)
+      errorMessage: isError ? message : null,
+      successMessage: !isError ? message : null
     })
   },
 
