@@ -3,7 +3,7 @@ import express = require("express");
 function updateMemberInfo(req: express.Request, res: express.Response) {
 
   var info = {
-    id: req.param("id"),
+    id: req.session.user.id,
     subPrice: req.param("subPrice"),
     feePrice: req.param("feePrice")
   }

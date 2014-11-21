@@ -76,13 +76,11 @@ var NewMemberBox = React.createClass({
     actions.member.updateMemberInfo(
     {
       data: {
-        id: self.props.userId,
-        isMember: self.state.isMember,
         subPrice: self.state.subPrice,
         feePrice: self.state.feePrice
       }
     }, function(err){
-        self.setMessage("member::memberBoxRequest"), isError = !!err);
+        self.setMessage("member::memberBoxRequest", isError = !!err);
     });
 
   },

@@ -2,6 +2,7 @@ import utils = require("mykoop-utils");
 import controllerList = require("./controllers/index");
 var logger = utils.getLogger(module);
 
+
 var async = require("async");
 var DatabaseError = utils.errors.DatabaseError;
 var ApplicationError = utils.errors.ApplicationError;
@@ -81,18 +82,14 @@ class Module extends utils.BaseModule implements mkmember.Module {
     updateInfo: mkmember.UpdateMember,
     callback: (err: Error) =>void
   ) {
-    var self = this;
+      var self = this;
       this.db.getConnection(function(err, connection, cleanup) {
         if(err) {
           return callback(err);
         }
+        var MySqlHelper = utils.MySqlHelper;
+        MySqlHelper.setConnection(cleanup, connection);
         async.waterfall([
-          function beginTransaction(next) {
-            logger.debug("Begin transaction");
-            connection.beginTransaction(function(err) {
-              next(err && new DatabaseError(err));
-            });
-          },
           function getEmailWithId(next){
             var query = connection.query(
               "SELECT email, (isnull(member.id) != 1) as isMember \
@@ -162,23 +159,10 @@ class Module extends utils.BaseModule implements mkmember.Module {
                     next(err && new DatabaseError(err) );
                 });
               }
-          }, function commitTransaction(next) {
-               logger.debug("Commiting transaction");
-                // No errors yet, commit all that
-                connection.commit(function(err) {
-                  next(err && new DatabaseError(err));
-                });
           }
         ], function(err){
-            if(err) {
-              connection.rollback(function() {
-                cleanup();
-                callback(new ApplicationError(err, {},""));
-              });
-              return;
-            }
             cleanup();
-            callback(null);
+            callback(err);
         }); // waterfall
       });//getConnection
     }
