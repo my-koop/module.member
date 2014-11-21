@@ -98,7 +98,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
                WHERE user.id = ?",
               [updateInfo.id],
               function(err , rows){
-                next(err && new DatabaseError(err), rows && rows[0].email, rows && rows[0].isMember);
+                next(err && new DatabaseError(err), rows.length === 1 && rows[0].email, rows.length === 1 && rows[0].isMember);
               }
             )
           },
