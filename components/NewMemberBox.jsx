@@ -13,6 +13,15 @@ var __ = require("language").__;
 var actions = require("actions");
 var formatMoney = require("language").formatMoney;
 
+var defaultState = {
+  subOptions: [],
+  feePrice: null,
+  subPrice: null,
+  totalPrice: null,
+  isMember: null,
+  errorMessage: null,
+  successMessage: null
+};
 var NewMemberBox = React.createClass({
 
   mixins: [React.addons.LinkedStateMixin],
@@ -22,18 +31,16 @@ var NewMemberBox = React.createClass({
   },
 
   getInitialState: function() {
-    return {
-      subOptions: [],
-      feePrice: null,
-      subPrice: null,
-      totalPrice: null,
-      isMember: null,
-      errorMessage: null,
-      successMessage: null
+    return defaultState;
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    if(this.props.userId !== nextProps.userId) {
+      this.updateMembershipInformation(nextProps.userId);
     }
   },
 
-  componentDidMount: function() {
+  componentWillMount: function() {
     var self = this;
     //Getting fee and subscriptions costs
     actions.member.getSubcriptionOptions(
@@ -41,19 +48,34 @@ var NewMemberBox = React.createClass({
         if(err) {
           return self.setMessage(__("member::memberBoxRequest"), isError = true);
         }
-        console.log(res);
+        var options = _.map(res.options, function(option) {
+          return {
+            name: option.name,
+            value: parseInt(option.value) || 0
+          }
+        });
         self.setState({
-          subOptions: res.options,
-          feePrice : self.state.isMember ? 0 : res.price,
-          subPrice : _.min(res.options, 'value').value
+          subOptions: options,
+          feePrice : parseInt(res.price) || 0,
+          subPrice : _.min(options, 'value').value
         });
       }
     );
+    this.updateMembershipInformation(this.props.userId);
+  },
 
+  updateMembershipInformation: function(userId) {
+    var self = this;
+    // Reset everything except subscription informations
+    self.setState(_.omit(defaultState,
+      "subOptions",
+      "feePrice",
+      "subPrice"
+    ));
     actions.member.isUserAMember(
       {
         data: {
-          id: self.props.userId
+          id: userId
         }
       },
       function(err, res) {
@@ -61,8 +83,7 @@ var NewMemberBox = React.createClass({
           return self.setMessage(__("member::memberBoxRequest"), isError = true);
         }
         self.setState({
-          isMember: res.isMember,
-          feePrice: res.isMember ? 0 : self.state.feePrice
+          isMember: res.isMember
         });
       }
     );
@@ -75,8 +96,10 @@ var NewMemberBox = React.createClass({
     {
       data: {
         id: self.props.userId,
+        // FIXME:: send the option selected, but the server should know the price
         subPrice: self.state.subPrice,
-        feePrice: self.state.feePrice
+        // FIXME:: The backend should know the fee price for a non member
+        feePrice: self.getAdhesionFee()
       }
     }, function(err) {
       self.setMessage("member::memberBoxRequest", !!err);
@@ -91,22 +114,27 @@ var NewMemberBox = React.createClass({
     })
   },
 
+  getAdhesionFee: function() {
+    return this.state.isMember ? 0 : this.state.feePrice || 0;
+  },
+
   getFeeString: function() {
     var display = "";
     if(this.state.isMember) {
       display = __("member::memberBoxFeeIsMember");
     } else {
-      display = formatMoney((this.state.feePrice? this.state.feePrice : 0));
+      display = formatMoney(this.getAdhesionFee());
     }
     return display;
   },
 
   getSubscriptionString: function() {
-    return formatMoney(this.state.subPrice? parseInt(this.state.subPrice) : 0 );
+    return formatMoney(this.state.subPrice || 0);
   },
 
   calculateTotalPrice: function() {
-    var total = parseInt(this.state.subPrice) + parseInt(this.state.feePrice);
+
+    var total = this.state.subPrice + this.getAdhesionFee();
     return formatMoney(total);
   },
 
