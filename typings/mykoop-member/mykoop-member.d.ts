@@ -4,38 +4,39 @@
 // Definitions: https://github.com/my-koop/type.definitions
 
 /// <reference path="../mykoop/mykoop.d.ts" />
+/// <reference path="./interfaces.d.ts" />
 declare module mkmember {
-
-
-  interface Option {
-    name: string;
-    value: string;
-  }
-  export interface MKOption {
-    options: Array<Option>;
-    price: number;
-  }
-
-  export interface UpdateMember {
-    id: number;
-    subPrice: number;
-    feePrice: number;
-  }
 
   export interface Module extends mykoop.IModule {
     getSubcriptionOptions(
-      callback: (err: Error, ret: mkmember.MKOption) => void
-    ): void;
+      params: GetSubcriptionOptions.Params,
+      callback: GetSubcriptionOptions.Callback
+    );
+    __getSubcriptionOptions(
+      connection: mysql.IConnection,
+      params: GetSubcriptionOptions.Params,
+      callback: GetSubcriptionOptions.Callback
+    );
 
-    getIsUserAMember(
-      id,
-      callback: (err: Error, res ?: boolean) => void
-    ): void;
+    isUserAMember(
+      params: IsUserAMember.Params,
+      callback: IsUserAMember.Callback
+    );
+    __isUserAMember(
+      connection: mysql.IConnection,
+      params: IsUserAMember.Params,
+      callback: IsUserAMember.Callback
+    );
 
     updateMemberInfo(
-      updateInfo: mkmember.UpdateMember,
-      callback: (err: Error) =>void
-    ): void;
+      params: UpdateMemberInfo.Params,
+      callback: UpdateMemberInfo.Callback
+    );
+    __updateMemberInfo(
+      connection: mysql.IConnection,
+      params: UpdateMemberInfo.Params,
+      callback: UpdateMemberInfo.Callback
+    );
   }
 }
 

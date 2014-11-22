@@ -1,32 +1,43 @@
-import metaData = require("../../metadata/index");
+import endpoints = require("../../metadata/endpoints");
 import utils = require("mykoop-utils");
+import Express = require("express");
 
 import validation = require("../validation/index");
 
-// Controllers.
-import getSubcriptionOptions = require("./getSubcriptionOptions");
-import getIsUserAMember = require("./getIsUserAMember");
-import updateMemberInfo = require("./updateMemberInfo");
-
-var endPoints = metaData.endpoints;
-
-export function attachControllers(binder) {
+export function attachControllers(
+  binder: utils.ModuleControllersBinder<mkmember.Module>
+) {
   binder.attach(
     {
-      endPoint: endPoints.member.getSubcriptionOptions
+      endPoint: endpoints.member.getSubcriptionOptions
     },
-    getSubcriptionOptions
+    binder.makeSimpleController("getSubcriptionOptions")
   );
   binder.attach(
     {
-      endPoint: endPoints.member.getIsUserAMember
+      endPoint: endpoints.member.isUserAMember
+      // TODO:: Add Validation
     },
-    getIsUserAMember
+    binder.makeSimpleController("isUserAMember", function(req: Express.Request) {
+      var params: mkmember.IsUserAMember.Params = {
+        id: parseInt(req.param("id"))
+      };
+      return params;
+    })
   );
   binder.attach(
     {
-      endPoint: endPoints.member.updateMemberInfo
+      endPoint: endpoints.member.updateMemberInfo
+      // TODO:: Check permissions and allow current user to pass through
+      // TODO:: Add Validation
     },
-    updateMemberInfo
+    binder.makeSimpleController("updateMemberInfo", function(req: Express.Request) {
+      var params: mkmember.UpdateMemberInfo.Params = {
+        id: parseInt(req.param("id")),
+        feePrice: parseInt(req.param("feePrice")),
+        subPrice: parseInt(req.param("subPrice"))
+      };
+      return params;
+    })
   );
 }

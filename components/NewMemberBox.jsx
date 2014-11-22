@@ -1,15 +1,16 @@
 var React = require("react");
 var PropTypes = React.PropTypes;
+
 var BSCol = require("react-bootstrap/Col");
 var BSGrid = require("react-bootstrap/Grid");
 var BSRow = require("react-bootstrap/Row");
 var BSInput = require("react-bootstrap/Input");
-var MKAlert = require("mykoop-core/components/Alert");
-var actions = require("actions");
-var _ = require("lodash");
 
-// Use this to provide localization strings.
+var MKAlert = require("mykoop-core/components/Alert");
+
+var _ = require("lodash");
 var __ = require("language").__;
+var actions = require("actions");
 var formatMoney = require("language").formatMoney;
 
 var NewMemberBox = React.createClass({
@@ -32,70 +33,67 @@ var NewMemberBox = React.createClass({
     }
   },
 
-  componentWillMount: function(){
+  componentDidMount: function() {
     var self = this;
     //Getting fee and subscriptions costs
     actions.member.getSubcriptionOptions(
-      function(err, res){
-        if(err){
-          self.setMessage(__("member::memberBoxRequest"), isError = true);
-          return;
-        } else {
-          console.log(res);
-          self.setState({
-            subOptions: res.options,
-            feePrice : res.price,
-            subPrice : _.min(res.options, 'value').value
-          })
+      function(err, res) {
+        if(err) {
+          return self.setMessage(__("member::memberBoxRequest"), isError = true);
         }
+        console.log(res);
+        self.setState({
+          subOptions: res.options,
+          feePrice : self.state.isMember ? 0 : res.price,
+          subPrice : _.min(res.options, 'value').value
+        });
       }
-    )
-    actions.member.getIsUserAMember(
+    );
+
+    actions.member.isUserAMember(
       {
         data: {
           id: self.props.userId
         }
       },
-      function(err, res){
-        if(err){
-          self.setMessage(__("member::memberBoxRequest"), isError = true);
-          return;
+      function(err, res) {
+        if(err) {
+          return self.setMessage(__("member::memberBoxRequest"), isError = true);
         }
         self.setState({
           isMember: res.isMember,
-          feePrice: (res.isMember) ? 0 : self.state.feePrice
+          feePrice: res.isMember ? 0 : self.state.feePrice
         });
-
-    })
-
+      }
+    );
   },
 
-  onSubmit: function(e){
+  onSubmit: function(e) {
     e.preventDefault();
     var self = this;
     actions.member.updateMemberInfo(
     {
       data: {
+        id: self.props.userId,
         subPrice: self.state.subPrice,
         feePrice: self.state.feePrice
       }
-    }, function(err){
-        self.setMessage("member::memberBoxRequest", !!err);
+    }, function(err) {
+      self.setMessage("member::memberBoxRequest", !!err);
     });
-
   },
 
-  setMessage: function(localesKey, isError){
-    var message = __(localesKey, { context: isError? "fail": "success" })
+  setMessage: function(localesKey, isError) {
+    var message = __(localesKey, { context: isError ? "fail": "success" })
     this.setState({
       errorMessage: isError ? message : null,
       successMessage: !isError ? message : null
     })
   },
 
-  getFeeString: function(){
+  getFeeString: function() {
     var display = "";
-    if(this.state.isMember){
+    if(this.state.isMember) {
       display = __("member::memberBoxFeeIsMember");
     } else {
       display = formatMoney((this.state.feePrice? this.state.feePrice : 0));
@@ -107,13 +105,13 @@ var NewMemberBox = React.createClass({
     return formatMoney(this.state.subPrice? parseInt(this.state.subPrice) : 0 );
   },
 
-  calculateTotalPrice: function(){
+  calculateTotalPrice: function() {
     var total = parseInt(this.state.subPrice) + parseInt(this.state.feePrice);
     return formatMoney(total);
   },
 
   render: function() {
-    var subOptions = _.map(this.state.subOptions, function(option, key){
+    var subOptions = _.map(this.state.subOptions, function(option, key) {
       return (
           <option key={key} value={option.value}>
             {__("member::memberBoxDropdown", {context : option.name } )}
@@ -155,7 +153,11 @@ var NewMemberBox = React.createClass({
             </BSRow>
             <BSRow>
               <BSCol xs={2} md={4}>
-                <span> { __("member::memberBoxTotal") + ":" +  this.calculateTotalPrice() } </span>
+                <span>
+                {
+                  __("member::memberBoxTotal") + ":" +  this.calculateTotalPrice()
+                }
+                </span>
               </BSCol>
             </BSRow>
             <BSRow>

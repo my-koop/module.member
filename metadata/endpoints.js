@@ -1,15 +1,15 @@
 var endpoints = {
     member: {
         getSubcriptionOptions: {
-            path: "/member/getSubcriptionOptions",
+            path: "/members/options",
             method: "get"
         },
-        getIsUserAMember: {
-            path: "/member/getIsUserAMember",
+        isUserAMember: {
+            path: "/users/:id/ismember",
             method: "get"
         },
         updateMemberInfo: {
-            path: "/member/updateMemberInfo",
+            path: "/users/:id/members",
             method: "put"
         }
     }

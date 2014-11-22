@@ -22,6 +22,9 @@
     },
     "mykoop-transaction/mykoop-transaction.d.ts": {
       "commit": "01e768f43e91822e5b18927ef05305db9d1be4d5"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "9c42eac834072f1bb3ed3c7e8551f8ec0770a937"
     }
   },
   "dependencies": {
