@@ -17,14 +17,13 @@ var defaultState = {
   subOptions: [],
   feePrice: null,
   subPrice: null,
+  iSubscription: 0,
   totalPrice: null,
   isMember: null,
   errorMessage: null,
   successMessage: null
 };
 var NewMemberBox = React.createClass({
-
-  mixins: [React.addons.LinkedStateMixin],
 
   propTypes : {
     userId: PropTypes.number.isRequired
@@ -54,10 +53,12 @@ var NewMemberBox = React.createClass({
             value: parseInt(option.value) || 0
           }
         });
+        options = _.sortBy(options, function(opt) {return opt.value;});
+
         self.setState({
           subOptions: options,
           feePrice : parseInt(res.price) || 0,
-          subPrice : _.min(options, 'value').value
+          subPrice : options.length !== 0 ? options[0].value : 0
         });
       }
     );
@@ -139,13 +140,24 @@ var NewMemberBox = React.createClass({
   },
 
   render: function() {
-    var subOptions = _.map(this.state.subOptions, function(option, key) {
+    var subOptions = _.map(this.state.subOptions, function(option, i) {
       return (
-          <option key={key} value={option.value}>
+          <option key={i} value={i}>
             {__("member::memberBoxDropdown", {context : option.name } )}
           </option>
         );
     });
+
+    var self = this;
+    var subPriceLink = {
+      value: this.state.iSubscription,
+      requestChange: function(i) {
+        self.setState({
+          iSubscription: i,
+          subPrice: self.state.subOptions[parseInt(i)].value
+        })
+      }
+    }
 
     return (
       <div>
@@ -170,7 +182,7 @@ var NewMemberBox = React.createClass({
                 <BSInput
                   type="select"
                   label={__("member::memberBoxDropdown")}
-                  valueLink={this.linkState("subPrice")}
+                  valueLink={subPriceLink}
                 >
                   {subOptions}
                 </BSInput>
