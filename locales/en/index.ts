@@ -3,4 +3,4 @@
 
 // To be merged with the "general" (default) namespace, not mandatory.
 export var general = require("./general");
-export var mynamespace = require("./mynamespace");
+export var member = require("./member");

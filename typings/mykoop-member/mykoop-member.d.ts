@@ -4,18 +4,39 @@
 // Definitions: https://github.com/my-koop/type.definitions
 
 /// <reference path="../mykoop/mykoop.d.ts" />
+/// <reference path="./interfaces.d.ts" />
 declare module mkmember {
 
-  export interface ModuleClass1 {
-    value: string;
-    id: number;
-  }
   export interface Module extends mykoop.IModule {
-    method1(
-      inParam: {id:number; value:string},
-      callback: (err: Error, res ?: ModuleClass1) => void
-    ): void;
-  }
+    getSubcriptionOptions(
+      params: GetSubcriptionOptions.Params,
+      callback: GetSubcriptionOptions.Callback
+    );
+    __getSubcriptionOptions(
+      connection: mysql.IConnection,
+      params: GetSubcriptionOptions.Params,
+      callback: GetSubcriptionOptions.Callback
+    );
 
+    isUserAMember(
+      params: IsUserAMember.Params,
+      callback: IsUserAMember.Callback
+    );
+    __isUserAMember(
+      connection: mysql.IConnection,
+      params: IsUserAMember.Params,
+      callback: IsUserAMember.Callback
+    );
+
+    updateMemberInfo(
+      params: UpdateMemberInfo.Params,
+      callback: UpdateMemberInfo.Callback
+    );
+    __updateMemberInfo(
+      connection: mysql.IConnection,
+      params: UpdateMemberInfo.Params,
+      callback: UpdateMemberInfo.Callback
+    );
+  }
 }
 

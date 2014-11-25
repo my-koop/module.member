@@ -1,13 +1,18 @@
 var endpoints = {
-  example: {
-    get1: {
-      path: "/example/:id",
-      method: "get",
-      validation: {
-        resolve: "validation",
-        value: "get1"
-      }
+  member: {
+    getSubcriptionOptions: {
+      path: "/members/options",
+      method:"get"
+    },
+    isUserAMember: {
+      path: "/users/:id/ismember",
+      method: "get"
+    },
+    updateMemberInfo: {
+      path: "/users/:id/members",
+      method: "put"
     }
   }
+
 }
 export = endpoints;

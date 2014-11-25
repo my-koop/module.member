@@ -1,0 +1,13 @@
+{
+  "memberBoxDropdown_1mth": "1 Mois",
+  "memberBoxDropdown_3mth": "3 Mois",
+  "memberBoxDropdown_6mth": "6 Mois",
+  "memberBoxDropdown_1yr": "1 An",
+  "memberBoxDropdown" : "Durée de la cotisation",
+  "memberBoxFeeMessage": "Coût d'adhésion",
+  "memberBoxFeeIsMember": "Déjà Membre",
+  "memberAdhesionBoxTab": "Information membre",
+  "memberBoxRequest_fail" : "La requête a échoué, réessayez plus tard",
+  "memberBoxRequest_success" : "La demande a été enregistrée dans le système, veillez acquitter les frais à l'atelier",
+  "memberBoxTotal" : "Total"
+}
