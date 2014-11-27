@@ -154,7 +154,6 @@ class Module extends utils.BaseModule implements mkmember.Module {
               customerEmail : email,
               items: [{
                 id: -1,
-                // FIXME:: Do not trust the user
                 price: info.fee,
                 quantity: 1
               }]

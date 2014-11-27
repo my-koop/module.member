@@ -97,7 +97,7 @@ var NewMemberBox = React.createClass({
     {
       data: {
         id: self.props.userId,
-        subscriptionChoice: self.state.iSubscription,
+        subscriptionChoice: self.state.subOptions[parseInt(self.state.iSubscription)].name,
       }
     }, function(err) {
       self.setMessage("member::memberBoxRequest", !!err);
