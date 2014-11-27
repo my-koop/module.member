@@ -97,10 +97,7 @@ var NewMemberBox = React.createClass({
     {
       data: {
         id: self.props.userId,
-        // FIXME:: send the option selected, but the server should know the price
-        subPrice: self.state.subPrice,
-        // FIXME:: The backend should know the fee price for a non member
-        feePrice: self.getAdhesionFee()
+        subscriptionChoice: self.state.iSubscription,
       }
     }, function(err) {
       self.setMessage("member::memberBoxRequest", !!err);

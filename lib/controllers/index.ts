@@ -34,8 +34,7 @@ export function attachControllers(
     binder.makeSimpleController("updateMemberInfo", function(req: Express.Request) {
       var params: mkmember.UpdateMemberInfo.Params = {
         id: parseInt(req.param("id")),
-        feePrice: parseInt(req.param("feePrice")),
-        subPrice: parseInt(req.param("subPrice"))
+        subscriptionChoice: req.param("subscriptionChoice")
       };
       return params;
     })

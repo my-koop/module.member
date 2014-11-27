@@ -29,8 +29,7 @@ declare module mkmember {
   module UpdateMemberInfo {
     export interface Params {
       id: number;
-      subPrice: number;
-      feePrice: number;
+      subscriptionChoice: string;
     }
     export interface Callback {
       (err?: Error) : void;

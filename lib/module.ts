@@ -124,41 +124,61 @@ class Module extends utils.BaseModule implements mkmember.Module {
               next(null, row.email, row.isMember);
             }
           );
-        },
-        function createBillForFee(email: string, isMember: boolean, next) {
+        },function getPrices(email: string, isMember: boolean, next){
+          //Ordering by type so fee will always be in first row
+          connection.query(
+            "SELECT type, value \
+             FROM `option` \
+             WHERE \
+             type = 'fee' OR \
+             (type = 'sub' AND name = ?) \
+             ORDER BY type asc",
+             [params.subscriptionChoice],
+             function(err, res){
+                next(err && new DatabaseError(err),
+                  res.length === 2 &&  {
+                    "fee" : res[0].value,
+                    "sub" : res[1].value
+                  }, email , isMember
+                )
+            }
+          );
+        }
+        ,function createBillForFee(prices, email: string, isMember: boolean, next) {
           if(!isMember) {
             self.transaction.saveNewBill(
             {
-              total: params.feePrice,
-              archiveBill: true,
+              total: prices.fee,
+              archiveBill: false,
               customerEmail : email,
               items: [{
                 id: -1,
                 // FIXME:: Do not trust the user
-                price: params.feePrice,
+                price: prices.fee,
                 quantity: 1
               }]
             }, function(err , res) {
               logger.debug("New member bill result ", res);
               next(
                 err,
+                prices,
                 email,
                 isMember,
                 res && res.idBill
               );
             });
           } else {
-            next(null, email, isMember, null);
+            next(null,prices ,email, isMember, null);
           }
-        }, function createBillForSub(email, isMember, feeBillId, next) {
+        }, function createBillForSub(prices, email, isMember, feeBillId, next) {
             self.transaction.saveNewBill(
             {
-              total : params.subPrice,
-              archiveBill: true,
+              total : prices.sub,
+              archiveBill: false,
               customerEmail: email,
               items: [{
                 id: -1,
-                price: params.subPrice,
+                price: prices.sub,
                 quantity: 1
               }]
             }, function(err, res) {
