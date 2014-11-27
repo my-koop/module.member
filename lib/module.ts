@@ -135,13 +135,18 @@ class Module extends utils.BaseModule implements mkmember.Module {
              ORDER BY type asc",
              [params.subscriptionChoice],
              function(err, res){
-                next(err && new DatabaseError(err),
-                  res.length === 2 &&  {
-                    "fee" : res[0].value,
-                    "sub" : res[1].value,
-                    "subInterval" : res[1].interval
-                  }, email , isMember
-                )
+              if(res.length !== 2){
+                return callback(new ResourceNotFoundError(null, {subscriptionChoice: "notFound"}))
+              }
+              next(err && new DatabaseError(err),
+              {
+                "fee" : res[0].value,
+                "sub" : res[1].value,
+                "subInterval" : res[1].interval
+              },
+              email,
+              isMember
+              )
             }
           );
         }
