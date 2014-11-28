@@ -15,5 +15,6 @@
   "memberBoxSubscriptionStatus" : "Date d'expiration",
   "memberBoxSubscriptionExpired" : "Expirée",
   "memberBoxSubscriptionCost" : "Coût",
-  "memberBoxSubscriptionNewExpiration" : "Nouvelle Expiration"
+  "memberBoxSubscriptionNewExpiration" : "Nouvelle Expiration",
+  "memberBoxTransactionDetail" : "Transaction"
 }
