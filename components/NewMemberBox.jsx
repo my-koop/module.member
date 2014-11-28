@@ -1,17 +1,15 @@
 var React = require("react");
 var PropTypes = React.PropTypes;
-
-var BSCol = require("react-bootstrap/Col");
-var BSGrid = require("react-bootstrap/Grid");
-var BSRow = require("react-bootstrap/Row");
 var BSInput = require("react-bootstrap/Input");
-
+var BSPanel = require("react-bootstrap/Panel");
 var MKAlert = require("mykoop-core/components/Alert");
 
 var _ = require("lodash");
 var __ = require("language").__;
 var actions = require("actions");
 var formatMoney = require("language").formatMoney;
+var formatDate = require("language").formatDate;
+var moment = require("moment");
 
 var defaultState = {
   subOptions: [],
@@ -21,7 +19,8 @@ var defaultState = {
   totalPrice: null,
   isMember: null,
   errorMessage: null,
-  successMessage: null
+  successMessage: null,
+  activeUntil: null
 };
 var NewMemberBox = React.createClass({
 
@@ -84,7 +83,8 @@ var NewMemberBox = React.createClass({
           return self.setMessage(__("member::memberBoxRequest"), isError = true);
         }
         self.setState({
-          isMember: res.isMember
+          isMember: res.isMember,
+          activeUntil: res.activeUntil
         });
       }
     );
@@ -126,12 +126,28 @@ var NewMemberBox = React.createClass({
     return display;
   },
 
-  getSubscriptionString: function() {
+  getSubscriptionCost: function() {
     return formatMoney(this.state.subPrice || 0);
   },
 
-  calculateTotalPrice: function() {
+  getSubscriptionExpiration: function(){
+    return (this.state.activeUntil) ?
+            moment(this.state.activeUntil).format("LLL")
+            : __("member::memberBoxSubscriptionExpired")
+  },
 
+  getNewSubscriptionExpiration: function(){
+    if(!_.isEmpty(this.state.subOptions)){
+      var subscriptionChoice = this.state.subOptions[this.state.iSubscription].name.split(":");
+      return moment(this.state.activeUntil || new Date() )
+        .add(subscriptionChoice[0], subscriptionChoice[1])
+        .format("LLL");
+    } else {
+      return "";
+    }
+  },
+
+  calculateTotalPrice: function() {
     var total = this.state.subPrice + this.getAdhesionFee();
     return formatMoney(total);
   },
@@ -165,49 +181,38 @@ var NewMemberBox = React.createClass({
           {this.state.successMessage}
         </MKAlert>
         <form onSubmit={this.onSubmit}>
-          <BSGrid>
-            <BSRow>
-              <BSCol xs={2} md={4}>
-                {__("member::memberBoxFeeMessage")}
-              </BSCol>
-              <BSCol xs={2} md={4}>
-                {this.getFeeString()}
-              </BSCol>
-            </BSRow>
-            <BSRow>
-              <BSCol xs={2} md={4}>
-                <BSInput
-                  type="select"
-                  label={__("member::memberBoxDropdown")}
-                  valueLink={subPriceLink}
-                >
-                  {subOptions}
-                </BSInput>
-              </BSCol>
-              <BSCol xs={2} md={4}>
-                { this.getSubscriptionString() }
-              </BSCol>
-            </BSRow>
-            <BSRow>
-              <BSCol xs={2} md={4}>
-                <span>
-                {
-                  __("member::memberBoxTotal") + ":" +  this.calculateTotalPrice()
-                }
-                </span>
-              </BSCol>
-            </BSRow>
-            <BSRow>
-              <BSCol>
-                <BSInput
-                  type="submit"
-                  bsStyle="primary"
-                  bsSize="large"
-                  value={__("user::register_submit_button")}
-                />
-              </BSCol>
-            </BSRow>
-          </BSGrid>
+          <BSPanel header={__("member::memberBoxMembershipPanel")}>
+            {__("member::memberBoxFeeMessage") + ": " + this.getFeeString()}
+          </BSPanel>
+          <BSPanel header={__("member::memberboxSubscriptionPanel")}>
+            <p>
+              {__("member::memberBoxSubscriptionStatus") + ": " + this.getSubscriptionExpiration() }
+            </p>
+
+            <BSInput
+              type="select"
+              label={__("member::memberBoxDropdown")}
+              valueLink={subPriceLink}
+            >
+              {subOptions}
+            </BSInput>
+            <p>
+              {__("member::memberBoxSubscriptionCost") + ": " + this.getSubscriptionCost() }
+            </p>
+            <p>
+              {__("member::memberBoxSubscriptionNewExpiration") + ": " + this.getNewSubscriptionExpiration() }
+            </p>
+          </BSPanel>
+          <BSPanel header={__("member::memberBoxTransactionDetail")}>
+            <p>
+              { __("member::memberBoxTotal") + ": " +  this.calculateTotalPrice() }
+            </p>
+            <BSInput
+              type="submit"
+              bsStyle="primary"
+              value={__("user::register_submit_button")}
+            />
+          </BSPanel>
         </form>
       </div>
     );
