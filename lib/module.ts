@@ -73,7 +73,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
     callback: mkmember.IsUserAMember.Callback
   ) {
     connection.query(
-      "SELECT m.id \
+      "SELECT m.id, m.subscriptionExpirationDate \
        FROM member as m \
        INNER JOIN bill as b1 on (m.feeTransactionId = b1.idbill) \
        WHERE m.id = ? AND b1.closedDate IS NOT NULL",
@@ -81,7 +81,8 @@ class Module extends utils.BaseModule implements mkmember.Module {
       function(err, rows) {
         callback(
           err && new DatabaseError(err),
-          {isMember: rows && rows.length === 1}
+          {isMember: rows && rows.length === 1,
+           activeUntil: (rows && rows.length === 1) ? rows[0].subscriptionExpirationDate : null}
         );
       }
     );

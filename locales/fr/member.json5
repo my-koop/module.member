@@ -1,13 +1,20 @@
 {
-  "memberBoxDropdown_1mth": "1 Mois",
-  "memberBoxDropdown_3mth": "3 Mois",
-  "memberBoxDropdown_6mth": "6 Mois",
-  "memberBoxDropdown_1yr": "1 An",
-  "memberBoxDropdown" : "Durée de la cotisation",
+  "memberBoxDropdown_1:months": "1 Mois",
+  "memberBoxDropdown_3:months": "3 Mois",
+  "memberBoxDropdown_6:months": "6 Mois",
+  "memberBoxDropdown_1:years": "1 An",
+  "memberBoxDropdown" : "Prolonger votre cotisation de",
   "memberBoxFeeMessage": "Coût d'adhésion",
   "memberBoxFeeIsMember": "Déjà Membre",
   "memberAdhesionBoxTab": "Information membre",
   "memberBoxRequest_fail" : "La requête a échoué, réessayez plus tard",
   "memberBoxRequest_success" : "La demande a été enregistrée dans le système, veillez acquitter les frais à l'atelier",
-  "memberBoxTotal" : "Total"
+  "memberBoxTotal" : "Total",
+  "memberBoxMembershipPanel" : "Adhésion",
+  "memberboxSubscriptionPanel" : "Cotisation",
+  "memberBoxSubscriptionStatus" : "Date d'expiration",
+  "memberBoxSubscriptionExpired" : "Expirée",
+  "memberBoxSubscriptionCost" : "Coût",
+  "memberBoxSubscriptionNewExpiration" : "Nouvelle Expiration",
+  "memberBoxTransactionDetail" : "Transaction"
 }
