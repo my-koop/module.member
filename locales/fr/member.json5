@@ -1,4 +1,7 @@
 {
+  title: "Membres",
+  membershipFee: "Coût d'adhésion",
+  duration: "Duration",
   "memberBoxDropdown_1:months": "1 Mois",
   "memberBoxDropdown_3:months": "3 Mois",
   "memberBoxDropdown_6:months": "6 Mois",

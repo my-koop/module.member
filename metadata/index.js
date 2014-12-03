@@ -15,5 +15,18 @@ metaDataBuilder.addData("adminEditPlugins", {
         }
     }
 });
+metaDataBuilder.addData("core", {
+    contributions: {
+        settings: {
+            membership: {
+                titleKey: "member::title",
+                component: {
+                    resolve: "component",
+                    value: "MembershipSettings"
+                }
+            }
+        }
+    }
+});
 var metaData = metaDataBuilder.get();
 module.exports = metaData;
