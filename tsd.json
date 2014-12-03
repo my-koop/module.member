@@ -25,12 +25,16 @@
     },
     "lodash/lodash.d.ts": {
       "commit": "9c42eac834072f1bb3ed3c7e8551f8ec0770a937"
+    },
+    "mykoop-core/mykoop-core.d.ts": {
+      "commit": "c4e024753d4a3f168ef10b2ebb7282ae41659589"
     }
   },
   "dependencies": {
     "mykoop": {},
     "mykoop-database": {},
-    "mykoop-transaction": {}
+    "mykoop-transaction": {},
+    "mykoop-core": {}
   },
   "owned": {
     "mykoop-member": {}

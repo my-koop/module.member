@@ -27,7 +27,7 @@ var MembershipSettings = React.createClass({
         JSON.parse(props.settingsRaw.subscriptions),
         function(subscription) {
           subscription.duration = parseInt(subscription.duration);
-          subscription.price = parseInt(subscription.price);
+          subscription.price = Number(subscription.price);
           return subscription;
         }
       ),
@@ -81,7 +81,7 @@ var MembershipSettings = React.createClass({
         var priceLink = {
           value: subscription.price,
           requestChange: function(newPrice) {
-            subscriptions[i].price = parseInt(newPrice) || "";
+            subscriptions[i].price = newPrice;
             self.setSubscriptions(subscriptions);
           }
         };

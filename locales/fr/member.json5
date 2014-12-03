@@ -11,7 +11,7 @@
   "memberBoxFeeIsMember": "Déjà Membre",
   "memberAdhesionBoxTab": "Information membre",
   "memberBoxRequest_fail" : "La requête a échoué, réessayez plus tard",
-  "memberBoxRequest_success" : "La demande a été enregistrée dans le système, veillez acquitter les frais à l'atelier",
+  "memberBoxRequest_success" : "La demande a été enregistrée dans le système",
   "memberBoxTotal" : "Total",
   "memberBoxMembershipPanel" : "Adhésion",
   "memberboxSubscriptionPanel" : "Cotisation",

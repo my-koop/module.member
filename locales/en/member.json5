@@ -11,7 +11,7 @@
   "memberBoxFeeIsMember": "Already a member",
   "memberAdhesionBoxTab": "Membership",
   "memberBoxRequest_fail" : "We were unable to process your request, please try again later",
-  "memberBoxRequest_success" : "Your request has been filled, please visit us to pay for your membership",
+  "memberBoxRequest_success" : "Your request has correctly entered in the system",
   "memberBoxTotal"   : "Total",
   "memberBoxMembershipPanel": "Membership",
   "memberboxSubscriptionPanel": "Subscription",
