@@ -48,16 +48,15 @@ var NewMemberBox = React.createClass({
         }
         var options = _.map(res.options, function(option) {
           return {
-            name: option.name,
-            value: parseInt(option.value) || 0
+            duration: parseInt(option.duration),
+            price: parseFloat(option.price)
           }
         });
-        options = _.sortBy(options, function(opt) {return opt.value;});
-
+        var firstOption = _.first(options);
         self.setState({
           subOptions: options,
-          feePrice : parseInt(res.price) || 0,
-          subPrice : options.length !== 0 ? options[0].value : 0
+          feePrice : parseFloat(res.membershipFee),
+          subPrice : firstOption && firstOption.price || 0
         });
       }
     );
@@ -97,10 +96,18 @@ var NewMemberBox = React.createClass({
     {
       data: {
         id: self.props.userId,
-        subscriptionChoice: self.state.subOptions[parseInt(self.state.iSubscription)].name,
+        subscriptionChoice: self.state.iSubscription,
       }
     }, function(err) {
       self.setMessage("member::memberBoxRequest", !!err);
+      if(!err) {
+        var duration = self.state.subOptions[self.state.iSubscription].duration;
+        self.setState({
+          isMember: true,
+          activeUntil: moment(self.state.activeUntil || undefined)
+            .add(duration, "month").toDate()
+        });
+      }
     });
   },
 
@@ -138,9 +145,9 @@ var NewMemberBox = React.createClass({
 
   getNewSubscriptionExpiration: function(){
     if(!_.isEmpty(this.state.subOptions)){
-      var subscriptionChoice = this.state.subOptions[this.state.iSubscription].name.split(":");
-      return moment(this.state.activeUntil || new Date() )
-        .add(subscriptionChoice[0], subscriptionChoice[1])
+      var subscriptionChoice = this.state.subOptions[this.state.iSubscription].duration;
+      return moment(this.state.activeUntil || undefined )
+        .add(subscriptionChoice, "month")
         .format("LLL");
     } else {
       return "";
@@ -154,9 +161,19 @@ var NewMemberBox = React.createClass({
 
   render: function() {
     var subOptions = _.map(this.state.subOptions, function(option, i) {
+      var years = Math.floor(option.duration/12);
+      var months = option.duration%12;
+      var text = [];
+      if(years) {
+        text.push(__("time::count", {key: "year", count: years}));
+      }
+      if(months) {
+        text.push(__("time::count", {key: "month", count: months}));
+      }
+
       return (
           <option key={i} value={i}>
-            {__("member::memberBoxDropdown", {context : option.name } )}
+            {text.join(", ")}
           </option>
         );
     });
@@ -165,10 +182,11 @@ var NewMemberBox = React.createClass({
     var subPriceLink = {
       value: this.state.iSubscription,
       requestChange: function(i) {
+        i = parseInt(i);
         self.setState({
           iSubscription: i,
-          subPrice: self.state.subOptions[parseInt(i)].value
-        })
+          subPrice: self.state.subOptions[i].price
+        });
       }
     }
 
@@ -185,10 +203,11 @@ var NewMemberBox = React.createClass({
             {__("member::memberBoxFeeMessage") + ": " + this.getFeeString()}
           </BSPanel>
           <BSPanel header={__("member::memberboxSubscriptionPanel")}>
-            <p>
-              {__("member::memberBoxSubscriptionStatus") + ": " + this.getSubscriptionExpiration() }
-            </p>
-
+            {this.state.isMember ?
+              <p>
+                {__("member::memberBoxSubscriptionStatus") + ": " + this.getSubscriptionExpiration()}
+              </p>
+            : null}
             <BSInput
               type="select"
               label={__("member::memberBoxDropdown")}
