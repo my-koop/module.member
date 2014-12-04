@@ -3,17 +3,18 @@
 declare module mkmember {
 
   export interface Option {
-    name: string;
-    value: string;
+    duration: number; // in months
+    price: number;
   }
 
   module GetSubcriptionOptions {
     export interface Params {}
+    export interface CallbackResult {
+      options: Array<Option>;
+      membershipFee: number;
+    }
     export interface Callback {
-      (err: Error, res?: {
-        options: Array<Option>;
-        price: number;
-      }) : void;
+      (err: Error, res?: CallbackResult) : void;
     }
   }
 
@@ -29,7 +30,7 @@ declare module mkmember {
   module UpdateMemberInfo {
     export interface Params {
       id: number;
-      subscriptionChoice: string;
+      subscriptionChoice: number;
     }
     export interface Callback {
       (err?: Error) : void;
