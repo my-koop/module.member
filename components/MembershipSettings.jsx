@@ -12,6 +12,12 @@ var language = require("language");
 var __ = language.__;
 var getCurrencySymbol = language.getCurrencySymbol;
 
+function parseSubscription(subscription) {
+  subscription.duration = parseInt(subscription.duration) || 0;
+  subscription.price = parseFloat(subscription.price) || 0;
+  return subscription;
+}
+
 var MembershipSettings = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
@@ -25,11 +31,7 @@ var MembershipSettings = React.createClass({
     return {
       subscriptions: _.map(
         JSON.parse(props.settingsRaw.subscriptions),
-        function(subscription) {
-          subscription.duration = parseInt(subscription.duration);
-          subscription.price = Number(subscription.price);
-          return subscription;
-        }
+        parseSubscription
       ),
       membershipFee: props.settingsRaw.membershipFee
     };
@@ -44,9 +46,15 @@ var MembershipSettings = React.createClass({
   },
 
   getSettings: function() {
+    var subscriptions = _.map(this.state.subscriptions, parseSubscription);
+    var membershipFee = parseFloat(this.state.membershipFee);
+    this.setState({
+      subscriptions: subscriptions,
+      membershipFee: membershipFee
+    });
     return {
-      subscriptions: JSON.stringify(this.state.subscriptions),
-      membershipFee: 10
+      subscriptions: JSON.stringify(subscriptions),
+      membershipFee: membershipFee
     };
   },
 

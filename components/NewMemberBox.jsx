@@ -49,13 +49,13 @@ var NewMemberBox = React.createClass({
         var options = _.map(res.options, function(option) {
           return {
             duration: parseInt(option.duration),
-            price: Number(option.price)
+            price: parseFloat(option.price)
           }
         });
         var firstOption = _.first(options);
         self.setState({
           subOptions: options,
-          feePrice : Number(res.membershipFee),
+          feePrice : parseFloat(res.membershipFee),
           subPrice : firstOption && firstOption.price || 0
         });
       }
@@ -205,7 +205,7 @@ var NewMemberBox = React.createClass({
           <BSPanel header={__("member::memberboxSubscriptionPanel")}>
             {this.state.isMember ?
               <p>
-                {__("member::memberBoxSubscriptionStatus") + ": " + this.getSubscriptionExpiration() }
+                {__("member::memberBoxSubscriptionStatus") + ": " + this.getSubscriptionExpiration()}
               </p>
             : null}
             <BSInput
