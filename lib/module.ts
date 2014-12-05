@@ -155,6 +155,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
               total: fee,
               archiveBill: false,
               customerEmail : email,
+              category: "membership",
               items: [{
                 id: -1,
                 price: fee,
@@ -177,6 +178,7 @@ class Module extends utils.BaseModule implements mkmember.Module {
             total : subscriptionInfo.price,
             archiveBill: false,
             customerEmail: email,
+            category: "subscription",
             items: [{
               id: -1,
               price: subscriptionInfo.price,
