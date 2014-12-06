@@ -1,5 +1,6 @@
 {
   title: "Membres",
+  membership: "Adhésion",
   membershipFee: "Coût d'adhésion",
   duration: "Duration",
   memberBoxDropdown: "Prolonger votre cotisation de",
@@ -9,11 +10,12 @@
   memberBoxRequest_fail: "La requête a échoué, réessayez plus tard",
   memberBoxRequest_success: "La demande a été enregistrée dans le système",
   memberBoxTotal: "Total",
-  memberBoxMembershipPanel: "Adhésion",
+  memberBoxMembershipPanel: "$t(member::membership)",
   memberboxSubscriptionPanel: "Cotisation",
   memberBoxSubscriptionStatus: "Date d'expiration",
   memberBoxSubscriptionExpired: "Expirée",
   memberBoxSubscriptionCost: "Coût",
   memberBoxSubscriptionNewExpiration: "Nouvelle Expiration",
-  memberBoxTransactionDetail: "Transaction"
+  memberBoxTransactionDetail: "Transaction",
+  addSubscriptionOption: "Ajouter un type d'adhésion"
 }
