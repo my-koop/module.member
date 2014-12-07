@@ -4,14 +4,13 @@ import Express = require("express");
 
 import validation = require("../validation/index");
 
-// Helper controllers.
-//FIXME: Get this through the module manager...
-//var validateCurrentUser = require("mykoop-user/lib/controllers/validateCurrentUser");
-
 export function attachControllers(
   binder: utils.ModuleControllersBinder<mkmember.Module>
 ) {
   var member = binder.moduleInstance;
+  var user = <mkuser.Module>member.getModuleManager().get("user");
+  var validateCurrentUser = (<any>user.constructor).validateCurrentUser;
+
   binder.attach(
     {
       endPoint: endpoints.member.getSubcriptionOptions
@@ -21,19 +20,13 @@ export function attachControllers(
 
   binder.attach(
     {
-      endPoint: endpoints.member.isUserAMember
-      /*
+      endPoint: endpoints.member.isUserAMember,
       permissions: {
-        user: {
-          profile: {
-            membership: {
-              view: true
-            }
-          }
+        membership: {
+          view: true
         }
       },
       customPermissionDenied: validateCurrentUser
-      */
       // TODO:: Add Validation
     },
     binder.makeSimpleController(member.isUserAMember, function(req: Express.Request) {
@@ -48,12 +41,8 @@ export function attachControllers(
     {
       endPoint: endpoints.member.updateMemberInfo,
       permissions: {
-        user: {
-          profile: {
-            membership: {
-              edit: true
-            }
-          }
+        membership: {
+          edit: true
         }
       }
       // TODO:: Add Validation

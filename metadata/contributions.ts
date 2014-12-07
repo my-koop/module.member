@@ -22,12 +22,8 @@ var contributions = {
         hash: "membership",
         priority: 225,
         permissions: {
-          user: {
-            profile: {
-              membership: {
-                view: true
-              }
-            }
+          membership: {
+            view: true
           }
         }
       }
