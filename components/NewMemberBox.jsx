@@ -1,7 +1,10 @@
 var React = require("react");
 var PropTypes = React.PropTypes;
+
 var BSInput = require("react-bootstrap/Input");
 var BSPanel = require("react-bootstrap/Panel");
+
+var MKPermissionMixin = require("mykoop-user/components/PermissionMixin");
 var MKAlert = require("mykoop-core/components/Alert");
 
 var _ = require("lodash");
@@ -23,6 +26,7 @@ var defaultState = {
   activeUntil: null
 };
 var NewMemberBox = React.createClass({
+  mixins: [MKPermissionMixin],
 
   propTypes : {
     userId: PropTypes.number.isRequired
@@ -160,6 +164,12 @@ var NewMemberBox = React.createClass({
   },
 
   render: function() {
+    var canEditSubscription = this.constructor.validateUserPermissions({
+      membership: {
+        edit: true
+      }
+    });
+
     var subOptions = _.map(this.state.subOptions, function(option, i) {
       var years = Math.floor(option.duration/12);
       var months = option.duration%12;
@@ -200,38 +210,59 @@ var NewMemberBox = React.createClass({
         </MKAlert>
         <form onSubmit={this.onSubmit}>
           <BSPanel header={__("member::memberBoxMembershipPanel")}>
-            {__("member::memberBoxFeeMessage") + ": " + this.getFeeString()}
-          </BSPanel>
-          <BSPanel header={__("member::memberboxSubscriptionPanel")}>
-            {this.state.isMember ?
+            <p
+              className={this.state.isMember ? "text-success" : "text-warning"}
+            >
+              {this.state.isMember ?
+                __("member::membershipCurrent") :
+                __("member::membershipInexistent")
+              }.
+            </p>
+            {!this.state.isMember ?
               <p>
-                {__("member::memberBoxSubscriptionStatus") + ": " + this.getSubscriptionExpiration()}
+                {__("member::memberBoxFeeMessage")}
+                {": "}
+                <strong>{this.getFeeString()}</strong>
               </p>
             : null}
-            <BSInput
-              type="select"
-              label={__("member::memberBoxDropdown")}
-              valueLink={subPriceLink}
-            >
-              {subOptions}
-            </BSInput>
-            <p>
-              {__("member::memberBoxSubscriptionCost") + ": " + this.getSubscriptionCost() }
-            </p>
-            <p>
-              {__("member::memberBoxSubscriptionNewExpiration") + ": " + this.getNewSubscriptionExpiration() }
-            </p>
           </BSPanel>
-          <BSPanel header={__("member::memberBoxTransactionDetail")}>
-            <p>
-              { __("member::memberBoxTotal") + ": " +  this.calculateTotalPrice() }
-            </p>
-            <BSInput
-              type="submit"
-              bsStyle="primary"
-              value={__("user::register_submit_button")}
-            />
-          </BSPanel>
+          {canEditSubscription || this.state.isMember ?
+            <BSPanel header={__("member::memberboxSubscriptionPanel")}>
+              {this.state.isMember ?
+                <p>
+                  {__("member::memberBoxSubscriptionStatus") + ": " + this.getSubscriptionExpiration()}
+                </p>
+              : null}
+              {canEditSubscription ? [
+                <BSInput
+                  key="options"
+                  type="select"
+                  label={__("member::memberBoxDropdown")}
+                  valueLink={subPriceLink}
+                >
+                  {subOptions}
+                </BSInput>,
+                <p key="fee">
+                  {__("member::memberBoxSubscriptionCost") + ": " + this.getSubscriptionCost() }
+                </p>,
+                <p key="expiration">
+                  {__("member::memberBoxSubscriptionNewExpiration") + ": " + this.getNewSubscriptionExpiration() }
+                </p>
+              ] : null}
+            </BSPanel>
+          : null}
+          {canEditSubscription ?
+            <BSPanel header={__("member::memberBoxTransactionDetail")}>
+              <p>
+                { __("member::memberBoxTotal") + ": " +  this.calculateTotalPrice() }
+              </p>
+              <BSInput
+                type="submit"
+                bsStyle="success"
+                value={__("member::createInvoice")}
+              />
+            </BSPanel>
+          : null}
         </form>
       </div>
     );

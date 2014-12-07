@@ -3,7 +3,9 @@
   membership: "Membership",
   membershipFee: "Membership Fee",
   duration: "Duration",
-  memberBoxDropdown: "Extend your subscription by",
+  membershipCurrent: "Valid member",
+  membershipInexistent: "Currently not a member",
+  memberBoxDropdown: "Subscribe until",
   memberBoxFeeMessage: "Membership Fee",
   memberBoxFeeIsMember: "Already a member",
   memberAdhesionBoxTab: "Membership",
@@ -12,10 +14,11 @@
   memberBoxTotal: "Total",
   memberBoxMembershipPanel: "$t(member::membership)",
   memberboxSubscriptionPanel: "Subscription",
-  memberBoxSubscriptionStatus: "Expiration date",
+  memberBoxSubscriptionStatus: "Current expiration date",
   memberBoxSubscriptionExpired: "Expired",
   memberBoxSubscriptionCost: "Fee",
-  memberBoxSubscriptionNewExpiration: "New expiration date",
+  memberBoxSubscriptionNewExpiration: "Expiration date with selected subscription",
   memberBoxTransactionDetail: "Transaction Details",
-  addSubscriptionOption: "Add a subscription option"
+  addSubscriptionOption: "Add a subscription type",
+  createInvoice: "Create invoice"
 }
