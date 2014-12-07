@@ -159,7 +159,8 @@ class Module extends utils.BaseModule implements mkmember.Module {
               items: [{
                 id: -1,
                 price: fee,
-                quantity: 1
+                quantity: 1,
+                name: "Membership"
               }]
             }, function(err , res) {
               logger.debug("New member bill result ", res);
@@ -182,7 +183,8 @@ class Module extends utils.BaseModule implements mkmember.Module {
             items: [{
               id: -1,
               price: subscriptionInfo.price,
-              quantity: 1
+              quantity: 1,
+              name: "Subscription"
             }]
           }, function(err, res) {
             logger.debug("New subscription fee result ", res);
