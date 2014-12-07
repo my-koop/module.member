@@ -1,0 +1,7 @@
+{
+  membership: {
+    __description: "$t(member::membership)",
+    view: "Afficher les informations d'adhésion de tout utilisateur",
+    edit: "Modifier les informations d'adhésion de tout utilisateur"
+  }
+}

@@ -8,6 +8,9 @@ export function attachControllers(
   binder: utils.ModuleControllersBinder<mkmember.Module>
 ) {
   var member = binder.moduleInstance;
+  var user = <mkuser.Module>member.getModuleManager().get("user");
+  var validateCurrentUser = (<any>user.constructor).validateCurrentUser;
+
   binder.attach(
     {
       endPoint: endpoints.member.getSubcriptionOptions
@@ -17,7 +20,13 @@ export function attachControllers(
 
   binder.attach(
     {
-      endPoint: endpoints.member.isUserAMember
+      endPoint: endpoints.member.isUserAMember,
+      permissions: {
+        membership: {
+          view: true
+        }
+      },
+      customPermissionDenied: validateCurrentUser
       // TODO:: Add Validation
     },
     binder.makeSimpleController(member.isUserAMember, function(req: Express.Request) {
@@ -30,8 +39,12 @@ export function attachControllers(
 
   binder.attach(
     {
-      endPoint: endpoints.member.updateMemberInfo
-      // TODO:: Check permissions and allow admin only
+      endPoint: endpoints.member.updateMemberInfo,
+      permissions: {
+        membership: {
+          edit: true
+        }
+      }
       // TODO:: Add Validation
     },
     binder.makeSimpleController(member.updateMemberInfo, function(req: Express.Request) {
