@@ -20,7 +20,8 @@ var defaultState = {
   isMember: null,
   errorMessage: null,
   successMessage: null,
-  activeUntil: null
+  activeUntil: null,
+  requestReady: false
 };
 var NewMemberBox = React.createClass({
 
@@ -83,7 +84,8 @@ var NewMemberBox = React.createClass({
         }
         self.setState({
           isMember: res.isMember,
-          activeUntil: res.activeUntil
+          activeUntil: res.activeUntil,
+          requestReady: true
         });
       }
     );
@@ -91,7 +93,14 @@ var NewMemberBox = React.createClass({
 
   onSubmit: function(e) {
     e.preventDefault();
+    if(!this.state.requestReady){
+      return;
+    }
+
     var self = this;
+    self.setState({
+      requestReady: false
+    });
     actions.member.updateMemberInfo(
     {
       data: {
@@ -108,6 +117,9 @@ var NewMemberBox = React.createClass({
             .add(duration, "month").toDate()
         });
       }
+      self.setState({
+        requestReady: true
+      })
     });
   },
 
@@ -229,6 +241,7 @@ var NewMemberBox = React.createClass({
             <BSInput
               type="submit"
               bsStyle="primary"
+              disabled={!this.state.requestReady}
               value={__("user::register_submit_button")}
             />
           </BSPanel>
