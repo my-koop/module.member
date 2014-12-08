@@ -1,8 +1,13 @@
 var React = require("react");
 var PropTypes = React.PropTypes;
+
 var BSInput = require("react-bootstrap/Input");
 var BSPanel = require("react-bootstrap/Panel");
+var BSButton = require("react-bootstrap/Button");
+
+var MKPermissionMixin = require("mykoop-user/components/PermissionMixin");
 var MKAlert = require("mykoop-core/components/Alert");
+var MKConfirmationTrigger = require("mykoop-core/components/ConfirmationTrigger");
 
 var _ = require("lodash");
 var __ = require("language").__;
@@ -20,10 +25,10 @@ var defaultState = {
   isMember: null,
   errorMessage: null,
   successMessage: null,
-  activeUntil: null,
-  requestReady: false
+  activeUntil: null
 };
 var NewMemberBox = React.createClass({
+  mixins: [MKPermissionMixin],
 
   propTypes : {
     userId: PropTypes.number.isRequired
@@ -84,23 +89,14 @@ var NewMemberBox = React.createClass({
         }
         self.setState({
           isMember: res.isMember,
-          activeUntil: res.activeUntil,
-          requestReady: true
+          activeUntil: res.activeUntil
         });
       }
     );
   },
 
-  onSubmit: function(e) {
-    e.preventDefault();
-    if(!this.state.requestReady){
-      return;
-    }
-
+  onSubmit: function() {
     var self = this;
-    self.setState({
-      requestReady: false
-    });
     actions.member.updateMemberInfo(
     {
       data: {
@@ -117,9 +113,6 @@ var NewMemberBox = React.createClass({
             .add(duration, "month").toDate()
         });
       }
-      self.setState({
-        requestReady: true
-      })
     });
   },
 
@@ -172,6 +165,12 @@ var NewMemberBox = React.createClass({
   },
 
   render: function() {
+    var canEditSubscription = this.constructor.validateUserPermissions({
+      membership: {
+        edit: true
+      }
+    });
+
     var subOptions = _.map(this.state.subOptions, function(option, i) {
       var years = Math.floor(option.duration/12);
       var months = option.duration%12;
@@ -210,42 +209,67 @@ var NewMemberBox = React.createClass({
         <MKAlert bsStyle="success">
           {this.state.successMessage}
         </MKAlert>
-        <form onSubmit={this.onSubmit}>
           <BSPanel header={__("member::memberBoxMembershipPanel")}>
-            {__("member::memberBoxFeeMessage") + ": " + this.getFeeString()}
-          </BSPanel>
-          <BSPanel header={__("member::memberboxSubscriptionPanel")}>
-            {this.state.isMember ?
+            <p
+              className={this.state.isMember ? "text-success" : "text-warning"}
+            >
+              {this.state.isMember ?
+                __("member::membershipCurrent") :
+                __("member::membershipInexistent")
+              }.
+            </p>
+            {!this.state.isMember ?
               <p>
-                {__("member::memberBoxSubscriptionStatus") + ": " + this.getSubscriptionExpiration()}
+                {__("member::memberBoxFeeMessage")}
+                {": "}
+                <strong>{this.getFeeString()}</strong>
               </p>
             : null}
-            <BSInput
-              type="select"
-              label={__("member::memberBoxDropdown")}
-              valueLink={subPriceLink}
-            >
-              {subOptions}
-            </BSInput>
-            <p>
-              {__("member::memberBoxSubscriptionCost") + ": " + this.getSubscriptionCost() }
-            </p>
-            <p>
-              {__("member::memberBoxSubscriptionNewExpiration") + ": " + this.getNewSubscriptionExpiration() }
-            </p>
           </BSPanel>
-          <BSPanel header={__("member::memberBoxTransactionDetail")}>
-            <p>
-              { __("member::memberBoxTotal") + ": " +  this.calculateTotalPrice() }
-            </p>
-            <BSInput
-              type="submit"
-              bsStyle="primary"
-              disabled={!this.state.requestReady}
-              value={__("user::register_submit_button")}
-            />
-          </BSPanel>
-        </form>
+          {canEditSubscription || this.state.isMember ?
+            <BSPanel header={__("member::memberboxSubscriptionPanel")}>
+              {this.state.isMember ?
+                <p>
+                  {__("member::memberBoxSubscriptionStatus") + ": " + this.getSubscriptionExpiration()}
+                </p>
+              : null}
+              {canEditSubscription ? [
+                <BSInput
+                  key="options"
+                  type="select"
+                  label={__("member::memberBoxDropdown")}
+                  valueLink={subPriceLink}
+                >
+                  {subOptions}
+                </BSInput>,
+                <p key="fee">
+                  {__("member::memberBoxSubscriptionCost") + ": " + this.getSubscriptionCost() }
+                </p>,
+                <p key="expiration">
+                  {__("member::memberBoxSubscriptionNewExpiration") + ": " + this.getNewSubscriptionExpiration() }
+                </p>
+              ] : null}
+            </BSPanel>
+          : null}
+          {canEditSubscription ?
+            <BSPanel header={__("member::memberBoxTransactionDetail")}>
+              <p>
+                { __("member::memberBoxTotal") + ": " +  this.calculateTotalPrice() }
+              </p>
+              <MKConfirmationTrigger
+                message={__("general::areYouSure")}
+                onYes={this.onSubmit}
+              >
+                <BSButton
+                  type="submit"
+                  bsStyle="success"
+                >
+                  {__("member::createInvoice")}
+                </BSButton>
+              </MKConfirmationTrigger>
+            </BSPanel>
+          : null}
+
       </div>
     );
   }
