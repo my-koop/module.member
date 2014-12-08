@@ -3,3 +3,4 @@
 // To be merged with the "general" (default) namespace, not mandatory.
 exports.general = require("./general");
 exports.member = require("./member");
+exports.permissions = require("./permissions");

@@ -1,37 +1,17 @@
 import utils = require("mykoop-utils");
 import routes = require("./routes");
-import translations = require("../locales/index");
+var translations = require("../locales");
 import endpoints = require("./endpoints");
+import permissions = require("./permissions");
+import contributions = require("./contributions");
 
 var metaDataBuilder = new utils.MetaDataBuilder();
 routes.addRoutes(metaDataBuilder);
 
 metaDataBuilder.addData("translations", translations);
 metaDataBuilder.addData("endpoints", endpoints);
-
-metaDataBuilder.addData("adminEditPlugins", {
-  membership: {
-    titleKey: "member::memberAdhesionBoxTab",
-    component: {
-      resolve: "component",
-      value: "NewMemberBox"
-    }
-  }
-});
-
-metaDataBuilder.addData("core", {
-  contributions: {
-    settings: {
-      membership: {
-        titleKey: "member::title",
-        component: {
-          resolve: "component",
-          value: "MembershipSettings"
-        }
-      }
-    }
-  }
-});
+metaDataBuilder.addData("permissions", permissions);
+metaDataBuilder.addData("contributions", contributions);
 
 var metaData = metaDataBuilder.get();
 export = metaData;

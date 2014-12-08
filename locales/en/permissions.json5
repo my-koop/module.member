@@ -1,0 +1,7 @@
+{
+  membership: {
+    __description: "$t(member::membership)",
+    view: "View the membership status of any user",
+    edit: "Edit the membership status of any user"
+  }
+}
