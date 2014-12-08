@@ -3,9 +3,11 @@ var PropTypes = React.PropTypes;
 
 var BSInput = require("react-bootstrap/Input");
 var BSPanel = require("react-bootstrap/Panel");
+var BSButton = require("react-bootstrap/Button");
 
 var MKPermissionMixin = require("mykoop-user/components/PermissionMixin");
 var MKAlert = require("mykoop-core/components/Alert");
+var MKConfirmationTrigger = require("mykoop-core/components/ConfirmationTrigger");
 
 var _ = require("lodash");
 var __ = require("language").__;
@@ -93,8 +95,7 @@ var NewMemberBox = React.createClass({
     );
   },
 
-  onSubmit: function(e) {
-    e.preventDefault();
+  onSubmit: function() {
     var self = this;
     actions.member.updateMemberInfo(
     {
@@ -208,7 +209,6 @@ var NewMemberBox = React.createClass({
         <MKAlert bsStyle="success">
           {this.state.successMessage}
         </MKAlert>
-        <form onSubmit={this.onSubmit}>
           <BSPanel header={__("member::memberBoxMembershipPanel")}>
             <p
               className={this.state.isMember ? "text-success" : "text-warning"}
@@ -256,14 +256,20 @@ var NewMemberBox = React.createClass({
               <p>
                 { __("member::memberBoxTotal") + ": " +  this.calculateTotalPrice() }
               </p>
-              <BSInput
-                type="submit"
-                bsStyle="success"
-                value={__("member::createInvoice")}
-              />
+              <MKConfirmationTrigger
+                message={__("general::areYouSure")}
+                onYes={this.onSubmit}
+              >
+                <BSButton
+                  type="submit"
+                  bsStyle="success"
+                >
+                  {__("member::createInvoice")}
+                </BSButton>
+              </MKConfirmationTrigger>
             </BSPanel>
           : null}
-        </form>
+
       </div>
     );
   }
