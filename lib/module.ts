@@ -152,10 +152,10 @@ class Module extends utils.BaseModule implements mkmember.Module {
           if(!isMember) {
             self.transaction.saveNewBill(
             {
-              total: fee,
               archiveBill: false,
               customerEmail : email,
               category: "membership",
+              forceNoTaxes: true,
               items: [{
                 id: -1,
                 price: fee,
@@ -176,10 +176,10 @@ class Module extends utils.BaseModule implements mkmember.Module {
         function createBillForSub(feeBillId, next) {
           self.transaction.saveNewBill(
           {
-            total : subscriptionInfo.price,
             archiveBill: false,
             customerEmail: email,
             category: "subscription",
+            forceNoTaxes: true,
             items: [{
               id: -1,
               price: subscriptionInfo.price,
