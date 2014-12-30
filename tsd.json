@@ -25,12 +25,20 @@
     },
     "lodash/lodash.d.ts": {
       "commit": "9c42eac834072f1bb3ed3c7e8551f8ec0770a937"
+    },
+    "mykoop-core/mykoop-core.d.ts": {
+      "commit": "c4e024753d4a3f168ef10b2ebb7282ae41659589"
+    },
+    "mykoop-user/mykoop-user.d.ts": {
+      "commit": "8f28c7a99b8e17055874601b3670f0ae2cd7da79"
     }
   },
   "dependencies": {
     "mykoop": {},
     "mykoop-database": {},
-    "mykoop-transaction": {}
+    "mykoop-transaction": {},
+    "mykoop-core": {},
+    "mykoop-user": {}
   },
   "owned": {
     "mykoop-member": {}
